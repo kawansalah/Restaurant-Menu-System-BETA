@@ -1,0 +1,492 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+/* Custom Font Declaration */
+@font-face {
+  font-family: "BahijJanna";
+  src: url("@/assets/fonts/BahijJanna-Bold.eot") format("embedded-opentype"),
+    url("@/assets/fonts/BahijJanna-Bold.ttf") format("truetype"),
+    url("@/assets/fonts/BahijJanna-Bold.svg#BahijJanna-Bold") format("svg");
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "BahijJanna";
+  src: url("@/assets/fonts/BahijJanna-Regular.eot") format("embedded-opentype"),
+    url("@/assets/fonts/BahijJanna-Regular.ttf") format("truetype"),
+    url("@/assets/fonts/BahijJanna-Regular.woff") format("woff"),
+    url("@/assets/fonts/BahijJanna-Regular.woff2") format("woff2");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Hide scrollbar but keep scroll functionality */
+.hide-scrollbar {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, and Opera */
+}
+
+/* Custom scrollbar for dropdown */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: var(--bg-secondary);
+  border-radius: 3px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: var(--category-stroke);
+  border-radius: 3px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: var(--main-stroke);
+}
+
+/* Tailwind v4 Theme Configuration */
+@theme {
+  --font-family-sans: "BahijJanna", -apple-system, BlinkMacSystemFont,
+    "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans",
+    "Droid Sans", "Helvetica Neue", sans-serif;
+  --font-family-bahij: "BahijJanna", sans-serif;
+  --font-family-bahij-regular: "BahijJanna", sans-serif;
+
+  /* Custom Color System */
+  --color-main: var(--bg-main);
+  --color-primary: var(--bg-primary);
+  --color-secondary: var(--bg-secondary);
+  --color-topbar: var(--bg-topbar);
+  --color-topbar-border: var(--bg-topbar-border);
+  --color-search-bar: var(--bg-search-bar);
+  --color-search-placeholder: var(--bg-search-placeholder);
+  --color-search-text: var(--bg-search-text);
+  --color-light-button-stroke: var(--light-button-stroke);
+  --color-card: var(--bg-card);
+  --color-category-stroke: var(--category-stroke);
+  --color-sub-category-stroke: var(--sub-category-stroke);
+  --color-rating: var(--bg-rating);
+  --color-main-stroke: var(--main-stroke);
+  --color-text-primary: var(--text-primary);
+  --color-text-secondary: var(--text-secondary);
+  --color-item-stroke: var(--item-stroke);
+  --color-bottom-navigation: var(--buttom-navigation);
+  --color-bottom-navigation-stroke: var(--buttom-navigation-stroke);
+  --color-shadow: var(--shadow);
+  --color-button-text-primary: var(--button-text-primary);
+  --color-button-text-secondary: var(--button-text-secondary);
+
+  --breakpoint-xs: 320px;
+  --breakpoint-sm: 640px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 1024px;
+  --breakpoint-xl: 1280px;
+  --breakpoint-2xl: 1536px;
+}
+
+/* Light mode (default) */
+:root {
+  --bg-main: #fdbb2a;
+  --bg-primary: #ffffff;
+  --bg-secondary: #fbfbfb;
+  --bg-topbar: #ffffff;
+  --bg-topbar-border: #e0e0e0;
+  --bg-search-bar: #f7f7f7;
+  --bg-language: #f7f7f7;
+  --language-stroke: #d7d7d7;
+  --bg-search-placeholder: #a5a5a5;
+  --light-button-stroke: #dddddd;
+  --bg-card: #ffffff;
+  --category-stroke: #e6e6e6;
+  --sub-category-stroke: #e9e9e9;
+  --bg-rating: #f0f0f0;
+  --main-stroke: #f7b524;
+  --text-primary: #1a1a1a;
+  --text-secondary: #6b7280;
+  --item-stroke: #e9e9e9;
+  --item-hover: #f8f8f8;
+  --buttom-navigation: #ffffff;
+  --buttom-navigation-stroke: #e9e9e9;
+  --button-text-primary: #ffffff;
+  --button-text-secondary: #4b4b4b;
+  --button-shadow-primary: 0px 6px 0px 0px #d59302;
+  --button-shadow-secondary: 0px 6px 0px 0px #dddddd;
+  --button-shadow-primary-hover: 0px 3px 0px 0px #d59302;
+  --button-shadow-secondary-hover: 0px 3px 0px 0px #dddddd;
+  --social-shadow-button-hover: 0px 3px 0px 0px #dddddd;
+  --topbar-shadow: 0px 5px 10px 0px rgba(0, 0, 0, 0.03);
+  --shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+}
+
+/* Dark mode */
+[data-theme="dark"] {
+  --bg-main: #fdbb2a;
+  --bg-primary: #313234;
+  --bg-secondary: #4b4b4b;
+  --bg-topbar: #292929;
+  --bg-topbar-border: #454545;
+  --bg-search-bar: #3a3a3a;
+  --bg-language: #525252;
+  --language-stroke: #646464;
+  --bg-search-placeholder: #ffffff;
+  --bg-search-text: #ffffff;
+  --bg-card: #3a3a3a;
+  --category-stroke: #646464;
+  --sub-category-stroke: #444444;
+  --bg-rating: #4b4b4b;
+  --main-stroke: #f7b524;
+  --text-primary: #313234;
+  --text-secondary: #ffffff;
+  --text-tertiary: #d4d4d4;
+  --item-stroke: #464646;
+  --item-hover: rgb(66, 66, 66);
+  --buttom-navigation: #252525;
+  --buttom-navigation-stroke: #444444;
+  --button-text-primary: #ffffff;
+  --button-text-secondary: #ffffff;
+  --button-shadow-primary: 0px 6px 0px 0px #d59302;
+  --button-shadow-secondary: 0px 6px 0px 0px #373737;
+  --button-shadow-primary-hover: 0px 3px 0px 0px #d59302;
+  --button-shadow-secondary-hover: 0px 3px 0px 0px #373737;
+  --social-shadow-button-hover: 0px 3px 0px 0px #646464;
+  --topbar-shadow: 0px 5px 10px 0px rgba(0, 0, 0, 0.03);
+  --card-shadow: 0px 5px 10px 0px rgba(0, 0, 0, 0.03);
+}
+/* Base styles */
+* {
+  box-sizing: border-box;
+  font-family: "BahijJanna", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans",
+    "Helvetica Neue", sans-serif;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: "BahijJanna", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans",
+    "Helvetica Neue", sans-serif;
+  font-weight: bold;
+}
+
+/* Loader Specific Styles */
+.loader-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.loader-sparkle {
+  position: absolute;
+  border-radius: 50%;
+  animation: sparkle-float 3s ease-in-out infinite;
+}
+
+@keyframes sparkle-float {
+  0%,
+  100% {
+    transform: translateY(0px) scale(1);
+    opacity: 0.7;
+  }
+  50% {
+    transform: translateY(-20px) scale(1.2);
+    opacity: 1;
+  }
+}
+
+.loader-text-gradient {
+  background: linear-gradient(45deg, #ff6b35, #f7931e, #ffd700, #ff6b35);
+  background-size: 400% 400%;
+  animation: gradient-shift 3s ease infinite;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+@keyframes gradient-shift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.loader-logo-glow {
+  filter: drop-shadow(0 0 20px rgba(255, 165, 0, 0.6));
+  animation: glow-pulse 2s ease-in-out infinite alternate;
+}
+
+@keyframes glow-pulse {
+  from {
+    filter: drop-shadow(0 0 20px rgba(255, 165, 0, 0.6));
+  }
+  to {
+    filter: drop-shadow(0 0 30px rgba(255, 165, 0, 0.8));
+  }
+}
+
+/* Smooth transition for loader fade out */
+.loader-fade-out {
+  transition: opacity 0.8s ease-in-out, transform 0.5s ease-in-out;
+}
+
+/* Preload fonts to prevent flash */
+.font-preload {
+  font-family: "BahijJanna", sans-serif;
+  font-weight: normal;
+  font-weight: bold;
+  opacity: 0;
+  position: absolute;
+  left: -9999px;
+}
+
+/* Ensure smooth animations on all devices */
+* {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Disable text selection during loading */
+.loader-container * {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* Loader shine animation */
+.loader-shine {
+  animation: shine 1.5s infinite;
+}
+
+@keyframes shine {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+/* Prevent text selection */
+* {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* Allow text selection for input fields */
+input,
+textarea {
+  -webkit-user-select: text;
+  -moz-user-select: text;
+  -ms-user-select: text;
+  user-select: text;
+}
+
+/* Prevent drag and drop */
+img {
+  -webkit-user-drag: none;
+  -khtml-user-drag: none;
+  -moz-user-drag: none;
+  -o-user-drag: none;
+  user-drag: none;
+  pointer-events: none;
+}
+
+/* Hide content when printing */
+@media print {
+  * {
+    display: none !important;
+  }
+
+  body::after {
+    content: "Printing is not allowed";
+    display: block !important;
+    text-align: center;
+    font-size: 24px;
+    margin-top: 50px;
+  }
+}
+
+
+/* Custom Input Animations */
+@keyframes scale-in {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes fade-in {
+  0% {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slide-down {
+  0% {
+    opacity: 0;
+    transform: translateY(-10px) scale(0.95);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes slide-up {
+  0% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-10px) scale(0.95);
+  }
+}
+
+@keyframes pulse-ring {
+  0% {
+    transform: scale(0.8);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(2.4);
+    opacity: 0;
+  }
+}
+
+/* Modal specific animations */
+@keyframes modal-backdrop-in {
+  0% {
+    opacity: 0;
+    backdrop-filter: blur(0px);
+  }
+  100% {
+    opacity: 1;
+    backdrop-filter: blur(4px);
+  }
+}
+
+@keyframes modal-backdrop-out {
+  0% {
+    opacity: 1;
+    backdrop-filter: blur(4px);
+  }
+  100% {
+    opacity: 0;
+    backdrop-filter: blur(0px);
+  }
+}
+
+@keyframes modal-scale-in {
+  0% {
+    opacity: 0;
+    transform: scale(0.9) translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes modal-scale-out {
+  0% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.9) translateY(20px);
+  }
+}
+
+@keyframes shake {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  10%, 30%, 50%, 70%, 90% {
+    transform: translateX(-2px);
+  }
+  20%, 40%, 60%, 80% {
+    transform: translateX(2px);
+  }
+}
+
+.animate-scale-in {
+  animation: scale-in 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.animate-fade-in {
+  animation: fade-in 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.animate-slide-down {
+  animation: slide-down 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.animate-slide-up {
+  animation: slide-up 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.animate-pulse-ring {
+  animation: pulse-ring 1.5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+.animate-modal-backdrop-in {
+  animation: modal-backdrop-in 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.animate-modal-backdrop-out {
+  animation: modal-backdrop-out 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.animate-modal-scale-in {
+  animation: modal-scale-in 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.animate-modal-scale-out {
+  animation: modal-scale-out 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.animate-shake {
+  animation: shake 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Focus ring for better accessibility */
+.focus-ring {
+  @apply focus:outline-none focus:ring-2;
+}
