@@ -54,6 +54,28 @@ export const defaultMenuConfig: MenuConfig = {
   showRating: true,
   showDescription: true,
 
+  // Social media and location configuration
+  socialMedia: {
+    // facebook: "https://facebook.com/salarrestaurant",
+    instagram: "https://www.instagram.com/the_first_cafe_",
+    // twitter: "https://twitter.com/salarrestaurant",
+    // whatsapp: "https://wa.me/9647701234567",
+    // telegram: "https://t.me/salarrestaurant",
+  },
+
+  location: {
+    address: {
+      ku: "سلێمانی، عێراق",
+      ar: "السليمانية، العراق",
+      en: "Sulaymaniyah, Iraq",
+    },
+    coordinates: {
+      lat: 35.5617,
+      lng: 45.4355,
+    },
+    googleMapsUrl: "https://goo.gl/maps/example",
+  },
+
   // Localized UI texts (keeping all existing UI translations)
   ui: {
     // Loader texts
@@ -242,7 +264,7 @@ export const defaultMenuConfig: MenuConfig = {
           en: "LinkedIn",
         },
         whatsapp: {
-          ku: "وەهاتسئاپ",
+          ku: "وەتساپ",
           ar: "واتساب",
           en: "WhatsApp",
         },

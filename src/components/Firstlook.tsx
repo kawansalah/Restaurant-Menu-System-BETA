@@ -8,6 +8,7 @@ import { defaultMenuConfig } from "@/config/dynamicMenuConfig";
 import MenuButton from "./MenuButton";
 import ThemeToggle from "./ThemeToggle";
 import FeedbackButton from "@/components/FeedbackButton";
+import SocialMediaLocationBar from "./SocialMediaLocationBar";
 import { useThemeClasses } from "@/hooks/useThemeClasses";
 
 function Firstlook() {
@@ -103,6 +104,23 @@ function Firstlook() {
               className="w-32 h-32 object-contain"
             />
           </div>
+
+          {/* Social Media and Location Buttons */}
+          <SocialMediaLocationBar
+            socialMedia={config.socialMedia}
+            location={config.location}
+            className="mt-6"
+            iconSize="lg"
+            spacing="normal"
+            showSeparator={true}
+            orientation="horizontal"
+            customStyles={{
+              container: "flex items-center justify-center gap-4",
+              socialContainer: "flex items-center gap-3",
+              iconButton: `p-2.5 rounded-full ${themeClasses.bgCard} ${themeClasses.textMain} hover:opacity-80 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105`,
+              separator: `w-px h-6 ${themeClasses.bgCard} opacity-50`,
+            }}
+          />
         </div>
 
         {/* Language Selection Card */}

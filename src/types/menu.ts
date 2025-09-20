@@ -45,6 +45,26 @@ export interface MenuConfig {
   defaultRating?: number;
   showRating?: boolean;
   showDescription?: boolean;
+
+  // Social media configuration
+  socialMedia?: {
+    facebook?: string;
+    instagram?: string;
+    twitter?: string;
+    whatsapp?: string;
+    telegram?: string;
+  };
+
+  // Location configuration
+  location?: {
+    address?: LocalizedText;
+    coordinates?: {
+      lat: number;
+      lng: number;
+    };
+    googleMapsUrl?: string;
+  };
+
   ui?: {
     loader: {
       subtitles: LocalizedText;
