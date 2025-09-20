@@ -272,7 +272,7 @@ function Header({
                 }}
               >
                 {theme.isDark
-                  ? getFeedbackIcon("#FDBB2A", 20)
+                  ? getFeedbackIcon("#B6934B", 20)
                   : getFeedbackIcon("#313234", 20)}
                 <span className={`text-base ${theme.textSearch} font-medium`}>
                   {currentLanguage === "ku"

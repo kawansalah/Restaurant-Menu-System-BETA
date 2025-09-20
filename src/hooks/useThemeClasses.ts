@@ -69,7 +69,8 @@ export const useThemeClasses = () => {
     // Shadow style object (use with style prop)
     topbarShadowStyle: "shadow-[var(--topbar-shadow)]",
     // cardShadowStyle: "shadow-[var(--card-shadow)]",
-
+    main:"#B6934B",
+    shadow:"#A27F37",
 
     // Current theme
     theme,
