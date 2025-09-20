@@ -14,7 +14,7 @@ import MenuItemCard from "@/components/MenuItemCard";
 import Footer from "@/components/Footer";
 import ItemInfo from "@/components/ItemInfo";
 import Cart from "@/components/Cart";
-import allmenu from "@/assets/images/foods/menu.png";
+import { all as AllIcon } from "@/components/Icons";
 import { useNavigate } from "react-router-dom";
 import { useRestaurantOptional } from "@/contexts/RestaurantContext";
 
@@ -42,7 +42,6 @@ function Menu({
   const navigate = useNavigate();
   const restaurantContext = useRestaurantOptional();
   const restaurant = restaurantContext?.restaurant || null;
-
 
   const currentLanguage: Language =
     contextLanguage || propLanguage || (urlLanguage as Language) || "ku";
@@ -81,7 +80,7 @@ function Menu({
                 ? "الكل"
                 : "All"
             ),
-            img: allmenu,
+            img: AllIcon,
           },
           ...config.categories
             .flatMap((category) => category.subCategories)
@@ -252,45 +251,49 @@ function Menu({
   const handleSearchButtonClick = () => {
     if (buttonsRef.current && searchBarRef.current) {
       setIsSearchExpanded(true);
-      
+
       // Set initial state for search bar
       gsap.set(searchBarRef.current, {
-        display: 'block',
+        display: "block",
         opacity: 0,
         scale: 0.8,
-        y: 10
+        y: 10,
       });
-      
+
       // Create GSAP timeline for smooth animation
       const tl = gsap.timeline();
-      
+
       // Animate buttons out
       tl.to(buttonsRef.current, {
         duration: 0.4,
         opacity: 0,
         scale: 0.8,
         y: -10,
-        ease: "power2.inOut"
+        ease: "power2.inOut",
       })
-      // Hide buttons and show search bar
-      .call(() => {
-        if (buttonsRef.current) buttonsRef.current.style.display = 'none';
-      })
-      // Animate search bar in
-      .to(searchBarRef.current, {
-        duration: 0.5,
-        opacity: 1,
-        scale: 1,
-        y: 0,
-        ease: "back.out(1.7)"
-      }, "-=0.1")
-      // Focus the input after animation
-      .call(() => {
-        const searchInput = document.getElementById('search-input');
-        if (searchInput) {
-          searchInput.focus();
-        }
-      });
+        // Hide buttons and show search bar
+        .call(() => {
+          if (buttonsRef.current) buttonsRef.current.style.display = "none";
+        })
+        // Animate search bar in
+        .to(
+          searchBarRef.current,
+          {
+            duration: 0.5,
+            opacity: 1,
+            scale: 1,
+            y: 0,
+            ease: "back.out(1.7)",
+          },
+          "-=0.1"
+        )
+        // Focus the input after animation
+        .call(() => {
+          const searchInput = document.getElementById("search-input");
+          if (searchInput) {
+            searchInput.focus();
+          }
+        });
     }
   };
 
@@ -307,14 +310,14 @@ function Menu({
     setTimeout(() => {
       window.scrollTo({
         top: window.scrollY + 0,
-        behavior: 'smooth'
+        behavior: "smooth",
       });
     }, 250);
   };
 
   const handleSearchBlur = () => {
     // Only hide the focused state if search input is empty
-    if (searchQuery.trim() === '') {
+    if (searchQuery.trim() === "") {
       setIsSearchFocused(false);
       animateBackToButtons();
     }
@@ -322,7 +325,7 @@ function Menu({
 
   const handleSearchClose = () => {
     // Clear search query and reset states
-    setSearchQuery('');
+    setSearchQuery("");
     setIsSearchFocused(false);
     animateBackToButtons();
   };
@@ -331,48 +334,52 @@ function Menu({
     if (buttonsRef.current && searchBarRef.current) {
       // Create GSAP timeline for reverse animation
       const tl = gsap.timeline();
-      
+
       // Animate search bar out
       tl.to(searchBarRef.current, {
         duration: 0.3,
         opacity: 0,
         scale: 0.9,
         y: -5,
-        ease: "power2.inOut"
+        ease: "power2.inOut",
       })
-      // Hide search bar and show buttons
-      .call(() => {
-        if (searchBarRef.current) searchBarRef.current.style.display = 'none';
-        if (buttonsRef.current) {
-          buttonsRef.current.style.display = 'flex';
-          gsap.set(buttonsRef.current, {
-            opacity: 0,
-            scale: 0.9,
-            y: 5
-          });
-        }
-      })
-      // Animate buttons back in
-      .to(buttonsRef.current, {
-        duration: 0.4,
-        opacity: 1,
-        scale: 1,
-        y: 0,
-        ease: "back.out(1.2)"
-      }, "-=0.1")
-      // Set state after animation
-      .call(() => {
-        setIsSearchExpanded(false);
-      });
+        // Hide search bar and show buttons
+        .call(() => {
+          if (searchBarRef.current) searchBarRef.current.style.display = "none";
+          if (buttonsRef.current) {
+            buttonsRef.current.style.display = "flex";
+            gsap.set(buttonsRef.current, {
+              opacity: 0,
+              scale: 0.9,
+              y: 5,
+            });
+          }
+        })
+        // Animate buttons back in
+        .to(
+          buttonsRef.current,
+          {
+            duration: 0.4,
+            opacity: 1,
+            scale: 1,
+            y: 0,
+            ease: "back.out(1.2)",
+          },
+          "-=0.1"
+        )
+        // Set state after animation
+        .call(() => {
+          setIsSearchExpanded(false);
+        });
     }
   };
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setSearchQuery(value);
-    
+
     // If search becomes empty, hide the focused state and collapse
-    if (value.trim() === '') {
+    if (value.trim() === "") {
       setIsSearchFocused(false);
       animateBackToButtons();
     } else {
@@ -409,11 +416,11 @@ function Menu({
       />
 
       {/* Categories with animation */}
-      <div 
+      <div
         className={`transition-all duration-500 ease-in-out overflow-hidden ${
-          isSearchFocused 
-            ? 'max-h-0 opacity-0 transform -translate-y-4' 
-            : 'max-h-[200px] opacity-100 transform translate-y-0'
+          isSearchFocused
+            ? "max-h-0 opacity-0 transform -translate-y-4"
+            : "max-h-[200px] opacity-100 transform translate-y-0"
         }`}
       >
         <Categories
@@ -426,11 +433,11 @@ function Menu({
 
       <div className="px-4 py-2 w-full max-w-3xl mx-auto">
         {/* Sub Categories with animation */}
-        <div 
+        <div
           className={`transition-all duration-500 ease-in-out overflow-hidden ${
-            isSearchFocused 
-              ? 'max-h-0 opacity-0 transform -translate-y-4' 
-              : 'max-h-[200px] opacity-100 transform translate-y-0'
+            isSearchFocused
+              ? "max-h-0 opacity-0 transform -translate-y-4"
+              : "max-h-[200px] opacity-100 transform translate-y-0"
           }`}
         >
           <SubCategories
@@ -442,10 +449,12 @@ function Menu({
         </div>
 
         {/* Menu Items */}
-        <div 
+        <div
           ref={menuItemsRef}
           className={`transition-all duration-500 ease-in-out ${
-            isSearchFocused ? 'transform -translate-y-8' : 'transform translate-y-0'
+            isSearchFocused
+              ? "transform -translate-y-8"
+              : "transform translate-y-0"
           }`}
         >
           {activeCategory === "all" ? (

@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useThemeClasses } from "@/hooks/useThemeClasses";
 import { useLanguage } from "@/contexts/LanguageContext";
-// import { defaultMenuConfig } from "@/config/menuConfig";
 import {defaultMenuConfig} from "@/config/dynamicMenuConfig";
 import Button from "@/components/Button";
 import { AlertOptions } from "@/contexts/AlertContext";

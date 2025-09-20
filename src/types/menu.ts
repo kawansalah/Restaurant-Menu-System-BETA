@@ -1,3 +1,5 @@
+import React from "react";
+
 export type Language = "ku" | "ar" | "en";
 
 export interface LocalizedText {
@@ -20,7 +22,7 @@ export interface MenuItem {
 export interface SubCategory {
   id: string;
   label: LocalizedText;
-  img: string;
+  img: string | React.ComponentType<{ className?: string }>;
 }
 
 export interface Category {

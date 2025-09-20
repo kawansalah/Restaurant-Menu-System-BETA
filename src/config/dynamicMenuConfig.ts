@@ -11,13 +11,50 @@ import {
   getMenuItemsByRestaurant,
   MenuItemWithLabel,
 } from "@/services/menuItemService";
-import { fetchSystemSettings } from "@/services/theme";
 
 import { MenuConfig, Category, SubCategory, MenuItem } from "@/types/menu";
 import mymenudark from "@/assets/logo/My Menu Dark.svg";
 import mymenulight from "@/assets/logo/MyMenu.svg";
 import defaultFoodImage from "@/assets/images/foods/Frame 46.png";
 import feedback from "@/assets/icons/feedback.png";
+
+// Category-specific "All" subcategory icons - React components from Icons.tsx
+import {
+  all as AllIcon,
+  drinksIcon as DrinksIcon,
+  sweetsIcon as SweetsIcon,
+} from "@/components/Icons";
+
+/**
+ * Dynamic "All" Subcategory Image System
+ *
+ * This configuration now supports dynamic images for the "All" subcategory in each category.
+ * The system uses a consistent icon-based approach:
+ *
+ * 1. Category-specific images: Uses predefined icons for specific categories (drinks, sweets, etc.)
+ * 2. Priority subcategories: Uses images from subcategories with keywords like "main", "popular", "featured"
+ * 3. General fallback: Always uses the "all.svg" icon for consistency
+ *
+ * This ensures all categories have consistent, professional icons rather than random subcategory images.
+ *
+ * To add category-specific "All" images:
+ * - Add entries to the categorySpecificImages object in getDynamicAllSubcategoryImage()
+ * - Use the category name (in any language, lowercase) as the key
+ * - Import your icons and use them as values
+ *
+ * Current categories with custom icons:
+ * - Beverages/Drinks: drinks.svg
+ * - Desserts/Sweets: sweets.svg
+ * - General/All: all.svg
+ *
+ * Example:
+ * const categorySpecificImages = {
+ *   'beverages': drinksIcon,
+ *   'مشروبات': drinksIcon,
+ *   'desserts': sweetsIcon,
+ *   'حلويات': sweetsIcon,
+ * };
+ */
 
 // Default menu configuration with UI texts and static assets
 export const defaultMenuConfig: MenuConfig = {
@@ -663,11 +700,100 @@ export const getMenuConfig = async (
       menuItemsMap.get(key)!.push(item);
     });
 
+    // Helper function to get dynamic "All" subcategory icon component for each category
+    const getDynamicAllSubcategoryImage = (
+      categoryId: string,
+      categoryLabel: { ku: string; ar: string; en: string },
+      subcategories: SubCategoryWithLabel[]
+    ): React.ComponentType<{ className?: string }> | string => {
+      // Option 1: Category-specific mapping based on category name (add more as needed)
+      const categorySpecificImages: Record<
+        string,
+        React.ComponentType<{ className?: string }>
+      > = {
+        // Beverages/Drinks category
+        beverages: DrinksIcon,
+        drinks: DrinksIcon,
+        مشروبات: DrinksIcon,
+        خواردنەوە: DrinksIcon,
+
+        // Desserts/Sweets category
+        desserts: SweetsIcon,
+        sweets: SweetsIcon,
+        حلويات: SweetsIcon,
+        شیرینی: SweetsIcon,
+
+        // General/All items - can be used as fallback
+        all: AllIcon,
+        main: AllIcon,
+        general: AllIcon,
+        عام: AllIcon,
+        گشتی: AllIcon,
+      };
+
+      // Check for category-specific image by ID
+      const categoryKey = categoryId.toLowerCase();
+      console.log("🔍 Category Debug Info:", {
+        categoryId,
+        categoryKey,
+        categoryLabel,
+        availableKeys: Object.keys(categorySpecificImages),
+      });
+
+      if (categorySpecificImages[categoryKey]) {
+        console.log("✅ Found match by ID:", categoryKey);
+        return categorySpecificImages[categoryKey];
+      }
+
+      // Check for category-specific image by name in all languages
+      const categoryNames = [
+        categoryLabel.en?.toLowerCase(),
+        categoryLabel.ar?.toLowerCase(),
+        categoryLabel.ku?.toLowerCase(),
+      ].filter(Boolean);
+
+      console.log("🔍 Checking category names:", categoryNames);
+
+      for (const name of categoryNames) {
+        if (name && categorySpecificImages[name]) {
+          console.log("✅ Found match by name:", name);
+          return categorySpecificImages[name];
+        }
+      }
+
+      // Option 2: Use the most representative subcategory image
+      // Prioritize subcategories with 'main', 'popular', 'featured' in their name
+      const priorityKeywords = [
+        "main",
+        "popular",
+        "featured",
+        "signature",
+        "special",
+      ];
+      const prioritySubcategory = subcategories.find((sub) =>
+        priorityKeywords.some((keyword) =>
+          Object.values(sub.label).some((label) =>
+            label.toLowerCase().includes(keyword)
+          )
+        )
+      );
+
+      if (prioritySubcategory?.img) {
+        return prioritySubcategory.img;
+      }
+
+      // Option 3: Always use the general "all" icon as primary fallback
+      // This ensures consistency across all categories
+      return AllIcon;
+
+      // Note: Removed subcategory image fallbacks to always use the consistent icon list
+    };
+
     // Transform categories to expected format
     const transformedCategories: Category[] = categories.map((category) => {
       const categorySubcategories = subcategoriesMap.get(category.id) || [];
 
-      // Add "All" subcategory as first item
+      // Add "All" subcategory as first item with dynamic image
       const allSubcategory: SubCategory = {
         id: `all-${category.id}`,
         label: {
@@ -675,7 +801,11 @@ export const getMenuConfig = async (
           ar: "الكل",
           en: "All",
         },
-        img: categorySubcategories[0]?.img || defaultFoodImage,
+        img: getDynamicAllSubcategoryImage(
+          category.id,
+          category.label,
+          categorySubcategories
+        ),
       };
 
       const transformedSubcategories: SubCategory[] = [
