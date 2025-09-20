@@ -3,7 +3,7 @@ import { Outlet, Navigate } from "react-router-dom";
 import { useAdminAuth } from "../contexts/AdminAuthContext";
 import Navigation from "@/admin/components/Navigation";
 import { useThemeClasses } from "@/hooks/useThemeClasses";
-import "@/admin/styles";
+
 
 const AdminLayout: React.FC = () => {
   const { isAuthenticated, isLoading } = useAdminAuth();

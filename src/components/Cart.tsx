@@ -5,6 +5,7 @@ import { useThemeClasses } from "@/hooks/useThemeClasses";
 import { defaultMenuConfig } from "@/config/dynamicMenuConfig";
 import CartIcon from "@/assets/icons/cart_2.svg";
 import CartInfo from "./CartInfo";
+import {Cart as CartSVG} from "@/components/Icons";
 
 interface CartProps {
   currency?: {
@@ -94,9 +95,9 @@ const Cart: React.FC<CartProps> = ({ currency }) => {
               {/* Cart Icon with Badge */}
               <div className="relative">
                 <div
-                  className={`flex items-center justify-center gap-2 px-4 py-4 rounded-2xl bg-[rgba(253,186,42,0.20)] font-bold text-sm transition-all duration-200`}
+                  className={`flex items-center justify-center gap-2 px-4 py-4 rounded-2xl bg-[rgba(162,126,55,0.26)] font-bold text-sm transition-all duration-200`}
                 >
-                  <img src={CartIcon} alt="Cart" className="w-6 h-6" />
+                  <CartSVG className="w-6 h-6 text-main" />
                 </div>
 
                 {/* Quantity Badge */}

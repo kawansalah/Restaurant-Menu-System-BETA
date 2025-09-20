@@ -23,7 +23,7 @@ function Categories({
             onClick={() => setActiveCategory(category.id)}
             className={`px-6 py-1 rounded-full whitespace-nowrap transition-all border cursor-pointer ${
               activeCategory === category.id
-                ? `${theme.bgMain} ${ theme.isDark ? theme.textPrimary : theme.buttonTextPrimary} font-bold ${theme.borderMain}`
+                ? `${theme.bgMain} ${ theme.isDark ? theme.buttonTextPrimary : theme.buttonTextPrimary} font-bold ${theme.borderMain}`
                 : `${theme.buttonSecondary} ${theme.itemHover}`
             }`}
           >

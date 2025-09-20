@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useCart } from "@/contexts/CartContext";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useThemeClasses } from "@/hooks/useThemeClasses";
-import CartIcon from "@/assets/icons/cart_2.svg";
+import {Cart as CartSVG} from "@/components/Icons"
 
 interface CartInfoProps {
   onClose: () => void;
@@ -26,7 +26,7 @@ const CartInfo: React.FC<CartInfoProps> = ({ onClose, currency }) => {
   const { language } = useLanguage();
   const themeClasses = useThemeClasses();
   const [isVisible, setIsVisible] = useState(false);
-  const [ServiceFee] = useState(2500);
+  const [ServiceFee] = useState(0);
   const [showClearConfirm, setShowClearConfirm] = useState(false);
   const [showPriceBreakdown, setShowPriceBreakdown] = useState(false);
 
@@ -347,8 +347,8 @@ const CartInfo: React.FC<CartInfoProps> = ({ onClose, currency }) => {
         >
           <div className="flex flex-row items-center">
             <div className="flex items-center gap-3 w-full">
-              <div className="w-12 h-12 rounded-full bg-[rgba(253,186,42,0.20)] flex items-center justify-center">
-                <img src={CartIcon} alt="" className="w-6 h-6 " />
+              <div className="w-12 h-12 rounded-full bg-[rgba(162,126,55,0.15)] flex items-center justify-center">
+                <CartSVG className="w-6 h-6 text-main" />
               </div>
               <div>
                 <h2 className="text-xl sm:text-xl font-bold">{texts.title}</h2>
@@ -458,7 +458,7 @@ const CartInfo: React.FC<CartInfoProps> = ({ onClose, currency }) => {
                                 )}{" "}
                                 × {item.quantity}
                               </span>
-                              <span className="font-bold text-[#FDBB2A] text-lg">
+                              <span className="font-bold text-main text-lg">
                                 {formatPrice(
                                   Number(item.price.replace(/,/g, "")) *
                                     item.quantity
@@ -504,7 +504,7 @@ const CartInfo: React.FC<CartInfoProps> = ({ onClose, currency }) => {
                                     item.quantity + 1
                                   )
                                 }
-                                className="w-9 h-9 bg-gradient-to-r from-[#FDBB2A] to-[#F59E0B] hover:from-[#E5A625] hover:to-[#D97706] text-white rounded-xl flex items-center justify-center transition-all duration-200 active:scale-95 shadow-lg border border-[#FDBB2A]/20"
+                                className="w-9 h-9 bg-gradient-to-r from-[#B6934B] to-[#A27F37] hover:from-[#A27F37] hover:to-[#8B6A2D] text-white rounded-xl flex items-center justify-center transition-all duration-200 active:scale-95 shadow-lg border border-main/20"
                                 aria-label="Increase quantity"
                               >
                                 {getPlusIcon("#FFFFFF", 16)}
@@ -524,7 +524,7 @@ const CartInfo: React.FC<CartInfoProps> = ({ onClose, currency }) => {
                     </div>
 
                     {/* Bottom accent line */}
-                    <div className="h-0.5 bg-gradient-to-r from-transparent via-[#FDBB2A]/20 to-transparent"></div>
+                    <div className="h-0.5 bg-gradient-to-r from-transparent via-main/20 to-transparent"></div>
                   </div>
                 ))}
               </div>
@@ -547,7 +547,7 @@ const CartInfo: React.FC<CartInfoProps> = ({ onClose, currency }) => {
                   <span className="text-xl sm:text-xl font-bold">
                     {texts.total}
                   </span>
-                  <span className="text-xl sm:text-xl font-bold text-[#FDBB2A]">
+                  <span className="text-xl sm:text-xl font-bold text-main">
                     {formatPrice(finalTotal)}
                   </span>
                 </div>

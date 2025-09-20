@@ -61,7 +61,7 @@ const FeedbackStatsCards: React.FC<FeedbackStatsCardsProps> = ({ stats }) => {
                   key={star}
                   className={`w-4 h-4 ${
                     star <= stats.averageRating
-                      ? "text-yellow-500 fill-current"
+                      ? "text-main fill-current"
                       : theme.textSecondary
                   }`}
                 />
@@ -109,7 +109,7 @@ const FeedbackStatsCards: React.FC<FeedbackStatsCardsProps> = ({ stats }) => {
                   className={`flex-1 h-2 ${theme.bgSecondary} rounded-full overflow-hidden`}
                 >
                   <div
-                    className="h-full bg-yellow-500 transition-all duration-300"
+                    className="h-full bg-main transition-all duration-300"
                     style={{
                       width:
                         stats.totalWithRating > 0

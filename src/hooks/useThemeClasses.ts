@@ -4,6 +4,7 @@ export const useThemeClasses = () => {
   const { theme } = useTheme();
 
   return {
+    
     // Background classes
     background:
       theme === "dark" ? "bg-[var(--bg-primary)]" : "bg-[var(--bg-primary)]", //new
@@ -68,6 +69,7 @@ export const useThemeClasses = () => {
     // Shadow style object (use with style prop)
     topbarShadowStyle: "shadow-[var(--topbar-shadow)]",
     // cardShadowStyle: "shadow-[var(--card-shadow)]",
+
 
     // Current theme
     theme,

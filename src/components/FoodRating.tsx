@@ -157,7 +157,7 @@ const FoodRating: React.FC<FoodRatingProps> = ({
             onClick={() => handleRatingChange(star)}
             className={`flex flex-row items-center justify-center rounded-2xl w-12 h-12 transition-all duration-200 transform hover:scale-110 ${
               star <= rating
-                ? "bg-[#FDBB2A] animate-bounce-once"
+                ? "bg-main animate-bounce-once"
                 : theme.isDark
                 ? "bg-[#373737] hover:bg-[#404040]"
                 : "bg-[#F4F4F4] hover:bg-[#E8E8E8]"

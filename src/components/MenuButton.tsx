@@ -38,8 +38,8 @@ function MenuButton({ item, onClick, type = "button" }: MenuButtonProps) {
       onClick={onClick}
       className={`flex items-center justify-between w-full py-[18px] px-5 rounded-[40px] text-xl font-bold transition-all ease-in-out duration-200 cursor-pointer outline-none focus:outline-none border-1 ${
         item.isSelected
-          ? `${theme.bgMain} ${theme.buttonTextPrimary} ${theme.buttonShadowPrimary} hover:translate-y-[2px] ${theme.buttonShadowPrimaryHover} active:translate-y-[6px] active:shadow-[0px_0px_0px_0px_#e6bb00] border-none`
-          : `${theme.bgSecondary} ${theme.buttonTextSecondary} ${theme.buttonShadowSecondary} hover:translate-y-[2px] ${theme.buttonShadowSecondaryHover} active:translate-y-[6px] active:shadow-[0px_0px_0px_0px_#2c2c2c] ${theme.isLight? theme.borderLightButton  : "border-none"}`
+          ? `${theme.bgMain} ${theme.buttonTextPrimary} ${theme.buttonShadowPrimary} hover:translate-y-[2px] ${theme.buttonShadowPrimaryHover} active:translate-y-[6px] active:shadow-[0px_0px_0px_0px_${theme.main}] border-none`
+          : `${theme.bgSecondary} ${theme.buttonTextSecondary} ${theme.buttonShadowSecondary} hover:translate-y-[2px] ${theme.buttonShadowSecondaryHover} active:translate-y-[6px] active:shadow-[0px_0px_0px_0px_${theme.main}] ${theme.isLight? theme.borderLightButton  : "border-none"}`
       }`}
     >
       <span className="flex-1 text-center">{item.label}</span>

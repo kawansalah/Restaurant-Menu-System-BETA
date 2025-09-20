@@ -93,7 +93,7 @@
 
 /* Light mode (default) */
 :root {
-  --bg-main: #fdbb2a;
+  --bg-main: #B6934B;
   --bg-primary: #ffffff;
   --bg-secondary: #fbfbfb;
   --bg-topbar: #ffffff;
@@ -107,7 +107,7 @@
   --category-stroke: #e6e6e6;
   --sub-category-stroke: #e9e9e9;
   --bg-rating: #f0f0f0;
-  --main-stroke: #f7b524;
+  --main-stroke: #A27F37;
   --text-primary: #1a1a1a;
   --text-secondary: #6b7280;
   --item-stroke: #e9e9e9;
@@ -116,9 +116,9 @@
   --buttom-navigation-stroke: #e9e9e9;
   --button-text-primary: #ffffff;
   --button-text-secondary: #4b4b4b;
-  --button-shadow-primary: 0px 6px 0px 0px #d59302;
+  --button-shadow-primary: 0px 6px 0px 0px #A27F37;
   --button-shadow-secondary: 0px 6px 0px 0px #dddddd;
-  --button-shadow-primary-hover: 0px 3px 0px 0px #d59302;
+  --button-shadow-primary-hover: 0px 3px 0px 0px #A27F37;
   --button-shadow-secondary-hover: 0px 3px 0px 0px #dddddd;
   --social-shadow-button-hover: 0px 3px 0px 0px #dddddd;
   --topbar-shadow: 0px 5px 10px 0px rgba(0, 0, 0, 0.03);
@@ -127,7 +127,7 @@
 
 /* Dark mode */
 [data-theme="dark"] {
-  --bg-main: #fdbb2a;
+  --bg-main: #B6934B;
   --bg-primary: #313234;
   --bg-secondary: #4b4b4b;
   --bg-topbar: #292929;
@@ -141,7 +141,7 @@
   --category-stroke: #646464;
   --sub-category-stroke: #444444;
   --bg-rating: #4b4b4b;
-  --main-stroke: #f7b524;
+  --main-stroke: #A27F37;
   --text-primary: #313234;
   --text-secondary: #ffffff;
   --text-tertiary: #d4d4d4;
@@ -151,9 +151,9 @@
   --buttom-navigation-stroke: #444444;
   --button-text-primary: #ffffff;
   --button-text-secondary: #ffffff;
-  --button-shadow-primary: 0px 6px 0px 0px #d59302;
+  --button-shadow-primary: 0px 6px 0px 0px #A27F37;
   --button-shadow-secondary: 0px 6px 0px 0px #373737;
-  --button-shadow-primary-hover: 0px 3px 0px 0px #d59302;
+  --button-shadow-primary-hover: 0px 3px 0px 0px #A27F37;
   --button-shadow-secondary-hover: 0px 3px 0px 0px #373737;
   --social-shadow-button-hover: 0px 3px 0px 0px #646464;
   --topbar-shadow: 0px 5px 10px 0px rgba(0, 0, 0, 0.03);

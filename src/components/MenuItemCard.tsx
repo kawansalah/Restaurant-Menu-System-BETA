@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { MenuItemCardProps } from "@/types/menu";
 import { getRatingStats } from "@/services/ratingService";
 import rating from "@/assets/icons/rating.svg";
+import { Rating } from "@/components/Icons";
 
 const MenuItemCard: React.FC<MenuItemCardProps> = ({
   item,
@@ -130,11 +131,8 @@ const MenuItemCard: React.FC<MenuItemCardProps> = ({
               ) : (
                 <>
                   <span className="text-xs font-bold">{displayRating}</span>
-                  <img
-                    src={rating}
-                    alt="rating"
-                    className="w-4 h-4 fill-[var(--bg-main)]"
-                  />
+     
+                  <Rating className="w-4 h-4 text-main" />
                   {totalRatings > 0 && (
                     <span className="text-[10px] opacity-75">
                       ({totalRatings})
@@ -182,7 +180,7 @@ const MenuItemCard: React.FC<MenuItemCardProps> = ({
         <div className="flex items-center justify-center">
           <div
             className={`${theme.bgMain} ${
-              theme.isDark ? theme.textPrimary : theme.buttonTextPrimary
+              theme.isDark ? theme.buttonTextPrimary : theme.buttonTextPrimary
             } px-2 py-1 rounded-full text-sm font-bold hover:opacity-80 transition-opacity flex items-center justify-center`}
           >
             {getPrice()}

@@ -348,7 +348,7 @@ const DeveloperSection: React.FC<{
           themeClasses.bgMain
         } ${
           themeClasses.isDark
-            ? themeClasses.textPrimary
+            ? themeClasses.buttonTextPrimary
             : themeClasses.buttonTextPrimary
         } px-6 py-3 rounded-full font-bold text-sm hover:opacity-90 hover:translate-y-[2px] transition-all duration-300 ${
           themeClasses.buttonShadowPrimary
@@ -358,7 +358,7 @@ const DeveloperSection: React.FC<{
         aria-label="Visit Kawan Salahadin's portfolio website"
       >
         <div className="group-hover:scale-110 transition-transform duration-300">
-          {themeClasses.isDark ? <DarkCode /> : <LightCode />}
+          {themeClasses.isDark ?<LightCode /> : <LightCode />}
         </div>
         <span>Portfolio</span>
       </button>

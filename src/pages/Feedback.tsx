@@ -575,7 +575,7 @@ function Feedback() {
             onClick={() => onRatingChange(star)}
             className={`flex flex-row items-center justify-center rounded-2xl w-12 h-12 transition-all duration-200 ${
               star <= rating
-                ? "bg-[#FDBB2A]"
+                ? "bg-main"
                 : theme.isDark
                 ? "bg-[#373737]"
                 : "bg-[#F4F4F4]"
@@ -628,8 +628,8 @@ function Feedback() {
         >
           <div className="flex flex-row items-center">
             <div className="flex items-center gap-3 w-full">
-              <div className="w-12 h-12 rounded-full bg-[rgba(253,186,42,0.20)] flex items-center justify-center">
-                {getFeedbackIcon("#FDBB2A", 24)}
+              <div className="w-12 h-12 rounded-full bg-[rgba(182,146,75,0.20)] flex items-center justify-center">
+                {getFeedbackIcon("#B6934B", 24)}
               </div>
               <div>
                 <h2

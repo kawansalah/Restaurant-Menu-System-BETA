@@ -172,7 +172,7 @@ const Navigation: React.FC<NavigationProps> = ({ className = "" }) => {
                         isActive
                           ? `${theme.bgMain} ${
                               theme.isDark
-                                ? theme.textPrimary
+                                ? theme.buttonTextPrimary
                                 : theme.buttonTextPrimary
                             } ${theme.borderMain} `
                           : `${
@@ -245,7 +245,7 @@ const Navigation: React.FC<NavigationProps> = ({ className = "" }) => {
                     isActiveRoute("/admin/settings")
                       ? `${theme.bgMain} ${
                           theme.isDark
-                            ? theme.textPrimary
+                            ? theme.buttonTextPrimary
                             : theme.buttonTextPrimary
                         } ${theme.borderMain}`
                       : `${
@@ -364,7 +364,7 @@ const Navigation: React.FC<NavigationProps> = ({ className = "" }) => {
                           isActive
                             ? `${theme.bgMain} ${
                                 theme.isDark
-                                  ? theme.textPrimary
+                                  ? theme.buttonTextPrimary
                                   : theme.buttonTextPrimary
                               } ${theme.borderMain}`
                             : `${theme.textSecondary} hover:${theme.bgSearchBar} ${theme.itemHover}`
@@ -383,7 +383,7 @@ const Navigation: React.FC<NavigationProps> = ({ className = "" }) => {
                             isActive
                               ? `scale-110 ${
                                   theme.isDark
-                                    ? theme.textPrimary
+                                    ? theme.buttonTextPrimary
                                     : theme.buttonTextPrimary
                                 }`
                               : `scale-100 ${theme.textSecondary}`

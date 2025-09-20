@@ -13,6 +13,7 @@ import CartIcon from "@/assets/icons/Cart.svg";
 import RatingIcon from "@/assets/icons/rating.svg";
 import FeedbackToast from "./FeedbackToast";
 import FoodRating from "./FoodRating";
+import { Rating } from "@/components/Icons";
 
 interface ItemInfoProps {
   item: MenuItem;
@@ -415,7 +416,7 @@ const ItemInfo: React.FC<ItemInfoProps> = ({
               }}
               onClick={() => setShowRatingModal(true)}
             >
-              <img src={RatingIcon} alt="rating" className="w-5 h-5" />
+              <Rating className="w-5 h-5 text-main" />
               <span className="text-lg font-bold">
                 {currentRating > 0 ? currentRating.toFixed(1) : "0.0"}
               </span>
@@ -471,7 +472,7 @@ const ItemInfo: React.FC<ItemInfoProps> = ({
               <div className="flex items-center gap-4">
                 <button
                   onClick={() => handleQuantityChange(1)}
-                  className="w-12 h-12 bg-[#FDBB2A] text-white rounded-full flex items-center justify-center text-2xl font-bold hover:bg-[#e6a821] transition-all duration-200 hover:scale-110 active:scale-95 shadow-lg"
+                  className="w-12 h-12 bg-main text-white rounded-full flex items-center justify-center text-2xl font-bold hover:bg-[var(--main-stroke)] transition-all duration-200 hover:scale-110 active:scale-95 shadow-lg"
                   aria-label={
                     defaultMenuConfig.ui?.itemInfo.increaseQuantity[language] ||
                     "Increase quantity"
@@ -549,7 +550,7 @@ const ItemInfo: React.FC<ItemInfoProps> = ({
               }}
             >
               <span className="text-lg font-bold">{getTotalText()}</span>
-              <span className="text-lg font-bold text-[#FDBB2A]">
+              <span className="text-lg font-bold text-main">
                 {(
                   Number(item.price.replace(/,/g, "")) * quantity
                 ).toLocaleString()}{" "}
