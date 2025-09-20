@@ -594,7 +594,7 @@ const SubCategoryFormModal: React.FC<SubCategoryFormModalProps> = ({
                     <input
                       ref={fileInputRef}
                       type="file"
-                      accept="image/*"
+                      accept="image/png,image/jpeg,image/jpg,image/svg+xml"
                       onChange={(e) => {
                         const file = e.target.files?.[0];
                         if (file) handleImageUpload(file);

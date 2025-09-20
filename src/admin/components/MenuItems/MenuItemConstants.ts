@@ -69,8 +69,13 @@ export const MENU_ITEM_VALIDATION = {
   DESCRIPTION_MAX_LENGTH: 1000,
   PRICE_MIN: 0.01,
   PRICE_MAX: 9999.99,
-  IMAGE_MAX_SIZE: 5 * 1024 * 1024, // 5MB
-  ALLOWED_IMAGE_TYPES: ["image/jpeg", "image/jpg", "image/png", "image/webp"],
+  IMAGE_MAX_SIZE: 10 * 1024 * 1024, // 10MB to accommodate larger PNG files
+  ALLOWED_IMAGE_TYPES: [
+    "image/jpeg",
+    "image/jpg",
+    "image/png",
+    "image/svg+xml",
+  ],
 } as const;
 
 // Menu Items status colors
@@ -82,7 +87,7 @@ export const MENU_ITEM_STATUS_COLORS = {
 // Menu Items rating colors
 export const MENU_ITEM_RATING_COLORS = {
   bad: { bg: "bg-[#ffd042]", text: "text-white", border: "border-[#ffd042]" }, // 3.0+
-  worse: { bg: "bg-[#FF5E5E]", text: "text-white", border: "border-[#FF5E5E]" } // <3.0
+  worse: { bg: "bg-[#FF5E5E]", text: "text-white", border: "border-[#FF5E5E]" }, // <3.0
 } as const;
 
 // Menu Items bulk actions

@@ -63,7 +63,12 @@ export const RESTAURANT_VALIDATION = {
   EMAIL_MAX_LENGTH: 255,
   WEBSITE_MAX_LENGTH: 255,
   LOGO_MAX_SIZE: 5 * 1024 * 1024, // 5MB
-  ALLOWED_IMAGE_TYPES: ["image/jpeg", "image/jpg", "image/png", "image/webp"],
+  ALLOWED_IMAGE_TYPES: [
+    "image/jpeg",
+    "image/jpg",
+    "image/png",
+    "image/svg+xml",
+  ],
 } as const;
 
 // Restaurant status colors

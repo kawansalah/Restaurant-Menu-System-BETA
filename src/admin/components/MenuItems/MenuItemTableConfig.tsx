@@ -283,14 +283,14 @@ export const defaultFormFieldConfig: MenuItemFormFieldConfig = {
   },
   price: {
     required: true,
-    currency: "IQD", 
+    currency: "IQD",
     min: 0.01,
     max: 9999.99,
   },
   image: {
     required: false,
-    maxSize: 5 * 1024 * 1024, // 5MB
-    allowedTypes: ["image/jpeg", "image/jpg", "image/png", "image/webp"],
+    maxSize: 10 * 1024 * 1024, // 10MB to accommodate PNG files
+    allowedTypes: ["image/jpeg", "image/jpg", "image/png", "image/svg+xml"],
   },
   availability: {
     defaultValue: true,

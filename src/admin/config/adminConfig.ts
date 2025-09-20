@@ -1068,9 +1068,9 @@ export const defaultAdminConfig: AdminConfig = {
         en: "Remove",
       },
       supportedFormats: {
-        ku: "فۆڕماتی پشتگیریکراو: JPG, PNG, WebP (گەورەترین قەبارە: ٥MB)",
-        ar: "الصيغ المدعومة: JPG, PNG, WebP (الحد الأقصى: 5 ميجابايت)",
-        en: "Supported formats: JPG, PNG, WebP (Max size: 5MB)",
+        ku: "فۆڕماتی پشتگیریکراو: JPG, PNG, SVG (گەورەترین قەبارە: ١٠MB)",
+        ar: "الصيغ المدعومة: JPG, PNG, SVG (الحد الأقصى: 10 ميجابايت)",
+        en: "Supported formats: JPG, PNG, SVG (Max size: 10MB)",
       },
     },
     feedback: {
@@ -1342,167 +1342,167 @@ export const defaultAdminConfig: AdminConfig = {
         en: "Cancel",
       },
       // Form fields
-       nameKu: {
-         ku: "ناوی کوردی",
-         ar: "الاسم بالكردية",
-         en: "Kurdish Name",
-       },
-       nameAr: {
-         ku: "ناوی عەرەبی",
-         ar: "الاسم بالعربية",
-         en: "Arabic Name",
-       },
-       nameEn: {
-         ku: "ناوی ئینگلیزی",
-         ar: "الاسم بالإنجليزية",
-         en: "English Name",
-       },
-       nameEnglish: {
-         ku: "ناوی ئینگلیزی",
-         ar: "الاسم بالإنجليزية",
-         en: "English Name",
-       },
-       nameArabic: {
-         ku: "ناوی عەرەبی",
-         ar: "الاسم بالعربية",
-         en: "Arabic Name",
-       },
-       nameKurdish: {
-         ku: "ناوی کوردی",
-         ar: "الاسم بالكردية",
-         en: "Kurdish Name",
-       },
-       price: {
-         ku: "نرخ (دینار)",
-         ar: "السعر (دينار)",
-         en: "Price (IQD)",
-       },
-       descriptionKu: {
-         ku: "پێناسەی کوردی",
-         ar: "الوصف بالكردية",
-         en: "Kurdish Description",
-       },
-       descriptionAr: {
-         ku: "پێناسەی عەرەبی",
-         ar: "الوصف بالعربية",
-         en: "Arabic Description",
-       },
-       descriptionEn: {
-         ku: "پێناسەی ئینگلیزی",
-         ar: "الوصف بالإنجليزية",
-         en: "English Description",
-       },
-       descriptionEnglish: {
-         ku: "پێناسەی ئینگلیزی",
-         ar: "الوصف بالإنجليزية",
-         en: "Description (English)",
-       },
-       descriptionArabic: {
-         ku: "پێناسەی عەرەبی",
-         ar: "الوصف بالعربية",
-         en: "Description (Arabic)",
-       },
-       descriptionKurdish: {
-         ku: "پێناسەی کوردی",
-         ar: "الوصف بالكردية",
-         en: "Description (Kurdish)",
-       },
+      nameKu: {
+        ku: "ناوی کوردی",
+        ar: "الاسم بالكردية",
+        en: "Kurdish Name",
+      },
+      nameAr: {
+        ku: "ناوی عەرەبی",
+        ar: "الاسم بالعربية",
+        en: "Arabic Name",
+      },
+      nameEn: {
+        ku: "ناوی ئینگلیزی",
+        ar: "الاسم بالإنجليزية",
+        en: "English Name",
+      },
+      nameEnglish: {
+        ku: "ناوی ئینگلیزی",
+        ar: "الاسم بالإنجليزية",
+        en: "English Name",
+      },
+      nameArabic: {
+        ku: "ناوی عەرەبی",
+        ar: "الاسم بالعربية",
+        en: "Arabic Name",
+      },
+      nameKurdish: {
+        ku: "ناوی کوردی",
+        ar: "الاسم بالكردية",
+        en: "Kurdish Name",
+      },
+      price: {
+        ku: "نرخ (دینار)",
+        ar: "السعر (دينار)",
+        en: "Price (IQD)",
+      },
+      descriptionKu: {
+        ku: "پێناسەی کوردی",
+        ar: "الوصف بالكردية",
+        en: "Kurdish Description",
+      },
+      descriptionAr: {
+        ku: "پێناسەی عەرەبی",
+        ar: "الوصف بالعربية",
+        en: "Arabic Description",
+      },
+      descriptionEn: {
+        ku: "پێناسەی ئینگلیزی",
+        ar: "الوصف بالإنجليزية",
+        en: "English Description",
+      },
+      descriptionEnglish: {
+        ku: "پێناسەی ئینگلیزی",
+        ar: "الوصف بالإنجليزية",
+        en: "Description (English)",
+      },
+      descriptionArabic: {
+        ku: "پێناسەی عەرەبی",
+        ar: "الوصف بالعربية",
+        en: "Description (Arabic)",
+      },
+      descriptionKurdish: {
+        ku: "پێناسەی کوردی",
+        ar: "الوصف بالكردية",
+        en: "Description (Kurdish)",
+      },
       availableForCustomers: {
         ku: "بەردەستە بۆ کڕیاران",
         ar: "متاح للعملاء",
         en: "Available for Customers",
       },
       menuItemImage: {
-         ku: "وێنەی خواردن",
-         ar: "صورة العنصر",
-         en: "Menu Item Image",
-       },
-       selectCategory: {
-         ku: "بەش هەڵبژێرە",
-         ar: "اختر الفئة",
-         en: "Select Category",
-       },
-       selectSubcategory: {
-         ku: "ژێربەش هەڵبژێرە",
-         ar: "اختر الفئة الفرعية",
-         en: "Select Subcategory",
-       },
-       selectCategoryFirst: {
-         ku: "سەرەتا بەش هەڵبژێرە",
-         ar: "اختر الفئة أولاً",
-         en: "Select Category First",
-       },
-       saving: {
-         ku: "پاشەکەوتکردن...",
-         ar: "جاري الحفظ...",
-         en: "Saving...",
-       },
-       // Form placeholders
-       enterNameKu: {
-         ku: "ناوی کوردی بنووسە",
-         ar: "أدخل الاسم بالكردية",
-         en: "Enter Kurdish name",
-       },
-       enterNameAr: {
-         ku: "ناوی عەرەبی بنووسە",
-         ar: "أدخل الاسم بالعربية",
-         en: "Enter Arabic name",
-       },
-       enterNameEn: {
-         ku: "ناوی ئینگلیزی بنووسە",
-         ar: "أدخل الاسم بالإنجليزية",
-         en: "Enter English name",
-       },
-       enterNameEnglish: {
-         ku: "ناوی ئینگلیزی بنووسە",
-         ar: "أدخل الاسم بالإنجليزية",
-         en: "Enter English name",
-       },
-       enterNameArabic: {
-         ku: "ناوی عەرەبی بنووسە",
-         ar: "أدخل الاسم بالعربية",
-         en: "Enter Arabic name",
-       },
-       enterNameKurdish: {
-         ku: "ناوی کوردی بنووسە",
-         ar: "أدخل الاسم بالكردية",
-         en: "Enter Kurdish name",
-       },
-       enterPrice: {
-         ku: "نرخ بنووسە",
-         ar: "أدخل السعر",
-         en: "Enter price",
-       },
-       enterDescriptionKu: {
-         ku: "پێناسەی کوردی بنووسە",
-         ar: "أدخل الوصف بالكردية",
-         en: "Enter Kurdish description",
-       },
-       enterDescriptionAr: {
-         ku: "پێناسەی عەرەبی بنووسە",
-         ar: "أدخل الوصف بالعربية",
-         en: "Enter Arabic description",
-       },
-       enterDescriptionEn: {
-         ku: "پێناسەی ئینگلیزی بنووسە",
-         ar: "أدخل الوصف بالإنجليزية",
-         en: "Enter English description",
-       },
-       enterDescriptionEnglish: {
-         ku: "پێناسەی ئینگلیزی بنووسە",
-         ar: "أدخل الوصف بالإنجليزية",
-         en: "Enter English description",
-       },
-       enterDescriptionArabic: {
-         ku: "پێناسەی عەرەبی بنووسە",
-         ar: "أدخل الوصف بالعربية",
-         en: "Enter Arabic description",
-       },
-       enterDescriptionKurdish: {
-         ku: "پێناسەی کوردی بنووسە",
-         ar: "أدخل الوصف بالكردية",
-         en: "Enter Kurdish description",
-       },
+        ku: "وێنەی خواردن",
+        ar: "صورة العنصر",
+        en: "Menu Item Image",
+      },
+      selectCategory: {
+        ku: "بەش هەڵبژێرە",
+        ar: "اختر الفئة",
+        en: "Select Category",
+      },
+      selectSubcategory: {
+        ku: "ژێربەش هەڵبژێرە",
+        ar: "اختر الفئة الفرعية",
+        en: "Select Subcategory",
+      },
+      selectCategoryFirst: {
+        ku: "سەرەتا بەش هەڵبژێرە",
+        ar: "اختر الفئة أولاً",
+        en: "Select Category First",
+      },
+      saving: {
+        ku: "پاشەکەوتکردن...",
+        ar: "جاري الحفظ...",
+        en: "Saving...",
+      },
+      // Form placeholders
+      enterNameKu: {
+        ku: "ناوی کوردی بنووسە",
+        ar: "أدخل الاسم بالكردية",
+        en: "Enter Kurdish name",
+      },
+      enterNameAr: {
+        ku: "ناوی عەرەبی بنووسە",
+        ar: "أدخل الاسم بالعربية",
+        en: "Enter Arabic name",
+      },
+      enterNameEn: {
+        ku: "ناوی ئینگلیزی بنووسە",
+        ar: "أدخل الاسم بالإنجليزية",
+        en: "Enter English name",
+      },
+      enterNameEnglish: {
+        ku: "ناوی ئینگلیزی بنووسە",
+        ar: "أدخل الاسم بالإنجليزية",
+        en: "Enter English name",
+      },
+      enterNameArabic: {
+        ku: "ناوی عەرەبی بنووسە",
+        ar: "أدخل الاسم بالعربية",
+        en: "Enter Arabic name",
+      },
+      enterNameKurdish: {
+        ku: "ناوی کوردی بنووسە",
+        ar: "أدخل الاسم بالكردية",
+        en: "Enter Kurdish name",
+      },
+      enterPrice: {
+        ku: "نرخ بنووسە",
+        ar: "أدخل السعر",
+        en: "Enter price",
+      },
+      enterDescriptionKu: {
+        ku: "پێناسەی کوردی بنووسە",
+        ar: "أدخل الوصف بالكردية",
+        en: "Enter Kurdish description",
+      },
+      enterDescriptionAr: {
+        ku: "پێناسەی عەرەبی بنووسە",
+        ar: "أدخل الوصف بالعربية",
+        en: "Enter Arabic description",
+      },
+      enterDescriptionEn: {
+        ku: "پێناسەی ئینگلیزی بنووسە",
+        ar: "أدخل الوصف بالإنجليزية",
+        en: "Enter English description",
+      },
+      enterDescriptionEnglish: {
+        ku: "پێناسەی ئینگلیزی بنووسە",
+        ar: "أدخل الوصف بالإنجليزية",
+        en: "Enter English description",
+      },
+      enterDescriptionArabic: {
+        ku: "پێناسەی عەرەبی بنووسە",
+        ar: "أدخل الوصف بالعربية",
+        en: "Enter Arabic description",
+      },
+      enterDescriptionKurdish: {
+        ku: "پێناسەی کوردی بنووسە",
+        ar: "أدخل الوصف بالكردية",
+        en: "Enter Kurdish description",
+      },
       // Image upload related texts
       uploadImage: {
         ku: "بارکردنی وێنە",
@@ -1540,9 +1540,9 @@ export const defaultAdminConfig: AdminConfig = {
         en: "Remove",
       },
       supportedFormats: {
-        ku: "فۆڕماتی پشتگیریکراو: JPG, PNG, WebP (گەورەترین قەبارە: ٥MB)",
-        ar: "الصيغ المدعومة: JPG, PNG, WebP (الحد الأقصى: 5 ميجابايت)",
-        en: "Supported formats: JPG, PNG, WebP (Max size: 5MB)",
+        ku: "فۆڕماتی پشتگیریکراو: JPG, PNG, SVG (گەورەترین قەبارە: ١٠MB)",
+        ar: "الصيغ المدعومة: JPG, PNG, SVG (الحد الأقصى: 10 ميجابايت)",
+        en: "Supported formats: JPG, PNG, SVG (Max size: 10MB)",
       },
       // Table columns
       name: {
@@ -1885,9 +1885,9 @@ export const defaultAdminConfig: AdminConfig = {
         en: "Remove",
       },
       supportedFormats: {
-        ku: "فۆڕماتی پشتگیریکراو: JPG, PNG, WebP (گەورەترین قەبارە: ٥MB)",
-        ar: "الصيغ المدعومة: JPG, PNG, WebP (الحد الأقصى: 5 ميجابايت)",
-        en: "Supported formats: JPG, PNG, WebP (Max size: 5MB)",
+        ku: "فۆڕماتی پشتگیریکراو: JPG, PNG, SVG (گەورەترین قەبارە: ٥MB)",
+        ar: "الصيغ المدعومة: JPG, PNG, SVG (الحد الأقصى: 5 ميجابايت)",
+        en: "Supported formats: JPG, PNG, SVG (Max size: 5MB)",
       },
       // Table columns
       status: {

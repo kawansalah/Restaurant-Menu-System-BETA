@@ -267,7 +267,7 @@ export const defaultFormFieldConfig: RestaurantFormFieldConfig = {
   logo: {
     required: false,
     maxSize: 5 * 1024 * 1024, // 5MB
-    allowedTypes: ["image/jpeg", "image/jpg", "image/png", "image/webp"],
+    allowedTypes: ["image/jpeg", "image/jpg", "image/png", "image/svg+xml"],
   },
   isActive: {
     defaultValue: true,

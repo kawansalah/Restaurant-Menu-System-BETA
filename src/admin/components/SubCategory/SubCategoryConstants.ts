@@ -267,3 +267,16 @@ export const SUBCATEGORY_TEXTS = {
     en: "This field is required",
   },
 } as const;
+
+// SubCategory form validation
+export const SUBCATEGORY_VALIDATION = {
+  LABEL_MIN_LENGTH: 2,
+  LABEL_MAX_LENGTH: 100,
+  IMAGE_MAX_SIZE: 10 * 1024 * 1024, // 10MB
+  ALLOWED_IMAGE_TYPES: [
+    "image/jpeg",
+    "image/jpg",
+    "image/png",
+    "image/svg+xml",
+  ],
+} as const;

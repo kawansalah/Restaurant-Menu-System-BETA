@@ -4,10 +4,7 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import { useAlerts } from "@/hooks/useAlerts";
 import { defaultAdminConfig } from "@/admin/config/adminConfig";
 import { defaultMenuConfig } from "@/config/dynamicMenuConfig";
-import {
-  Restaurant,
-  RestaurantCreateData,
-} from "@/admin/types/admin";
+import { Restaurant, RestaurantCreateData } from "@/admin/types/admin";
 import { Input } from "@/admin/components/Input";
 import Button from "@/components/Button";
 import { X, Upload, Loader, Trash2 } from "lucide-react";
@@ -16,7 +13,10 @@ import {
   deleteImageFromSupabase,
   replaceImageInSupabase,
 } from "@/admin/utils/imageUpload";
-import { validateRestaurantForm, validateRestaurantImage } from "./RestaurantUtils";
+import {
+  validateRestaurantForm,
+  validateRestaurantImage,
+} from "./RestaurantUtils";
 
 interface RestaurantFormData {
   name: string;
@@ -331,7 +331,9 @@ const RestaurantFormModal: React.FC<RestaurantFormModalProps> = ({
               theme.isDark ? theme.buttonTextPrimary : theme.textPrimary
             } transition-colors duration-200`}
           >
-            {editingRestaurant ? getText("editRestaurant") : getText("addRestaurant")}
+            {editingRestaurant
+              ? getText("editRestaurant")
+              : getText("addRestaurant")}
           </h3>
           <button
             onClick={handleCancel}
@@ -637,7 +639,7 @@ const RestaurantFormModal: React.FC<RestaurantFormModalProps> = ({
                     <input
                       ref={fileInputRef}
                       type="file"
-                      accept="image/*"
+                      accept="image/png,image/jpeg,image/jpg,image/svg+xml"
                       onChange={(e) => {
                         const file = e.target.files?.[0];
                         if (file) handleImageUpload(file);

@@ -1,6 +1,6 @@
 import supabase from "@/lib/supabase";
 
-// Image optimization and resizing utility
+// Image optimization and resizing utility that preserves format and transparency
 export const resizeImage = (
   file: File,
   maxWidth: number,
@@ -8,6 +8,12 @@ export const resizeImage = (
   quality: number = 0.8
 ): Promise<Blob> => {
   return new Promise((resolve) => {
+    // For SVG files, return the original file without processing
+    if (file.type === "image/svg+xml") {
+      resolve(file);
+      return;
+    }
+
     const canvas = document.createElement("canvas");
     const ctx = canvas.getContext("2d");
     const img = new Image();
@@ -32,16 +38,27 @@ export const resizeImage = (
       canvas.width = width;
       canvas.height = height;
 
-      // Draw and compress
-      ctx?.drawImage(img, 0, 0, width, height);
+      // Clear canvas with transparent background for PNG
+      if (ctx) {
+        if (file.type === "image/png") {
+          ctx.clearRect(0, 0, width, height);
+        }
+        ctx.drawImage(img, 0, 0, width, height);
+      }
+
+      // Determine output format based on input file type
+      const outputFormat =
+        file.type === "image/png" ? "image/png" : "image/jpeg";
+      const outputQuality = file.type === "image/png" ? 1.0 : quality; // PNG should be lossless
+
       canvas.toBlob(
         (blob) => {
           if (blob) {
             resolve(blob);
           }
         },
-        "image/jpeg",
-        quality
+        outputFormat,
+        outputQuality
       );
     };
 
@@ -58,7 +75,7 @@ export const resizeLogoImage = (
 ): Promise<Blob> => {
   return new Promise((resolve) => {
     // For SVG files, return the original file without processing
-    if (file.type === 'image/svg+xml') {
+    if (file.type === "image/svg+xml") {
       resolve(file);
       return;
     }
@@ -110,7 +127,7 @@ export const resizeLogoImage = (
   });
 };
 
-// Upload image to Supabase storage
+// Upload image to Supabase storage with format preservation
 export const uploadImageToSupabase = async (
   file: File,
   folder: string = "subcategories"
@@ -121,9 +138,16 @@ export const uploadImageToSupabase = async (
 }> => {
   try {
     // Validate file type - only support SVG, PNG, JPG
-    const allowedTypes = ['image/svg+xml', 'image/png', 'image/jpeg', 'image/jpg'];
+    const allowedTypes = [
+      "image/svg+xml",
+      "image/png",
+      "image/jpeg",
+      "image/jpg",
+    ];
     if (!allowedTypes.includes(file.type)) {
-      return { error: "Please select a valid image file (SVG, PNG, or JPG only)" };
+      return {
+        error: "Please select a valid image file (SVG, PNG, or JPG only)",
+      };
     }
 
     // Validate file size (max 10MB)
@@ -131,22 +155,62 @@ export const uploadImageToSupabase = async (
       return { error: "Image size must be less than 10MB" };
     }
 
-    const fileExt = file.name.split(".").pop();
+    const fileExt = file.name.split(".").pop()?.toLowerCase();
     const fileName = `${Date.now()}-${Math.random().toString(36).substring(2)}`;
 
-    // Create original size image (max 1920x1080)
-    const originalBlob = await resizeImage(file, 1920, 1080, 0.9);
-    const originalPath = `${folder}/original/${fileName}.${fileExt}`;
+    // Determine the correct file extension based on file type
+    let actualExt = fileExt;
+    if (file.type === "image/svg+xml") {
+      actualExt = "svg";
+    } else if (file.type === "image/png") {
+      actualExt = "png";
+    } else if (file.type === "image/jpeg" || file.type === "image/jpg") {
+      actualExt = "jpg";
+    }
 
-    // Create thumbnail (max 400x400)
+    // For SVG files, upload directly without processing
+    if (file.type === "image/svg+xml") {
+      const svgPath = `${folder}/original/${fileName}.${actualExt}`;
+
+      const { error: svgError } = await supabase.storage
+        .from("restaurant")
+        .upload(svgPath, file, {
+          contentType: file.type,
+          upsert: false,
+        });
+
+      if (svgError) {
+        return {
+          error: `Failed to upload SVG image: ${svgError.message}`,
+        };
+      }
+
+      // Get public URL for SVG
+      const { data: svgData } = supabase.storage
+        .from("restaurant")
+        .getPublicUrl(svgPath);
+
+      return {
+        originalUrl: svgData.publicUrl,
+        thumbnailUrl: svgData.publicUrl, // Use same URL for thumbnail for SVG
+      };
+    }
+
+    // For raster images (PNG/JPG), process and resize
+    const originalBlob = await resizeImage(file, 1920, 1080, 0.9);
+    const originalPath = `${folder}/original/${fileName}.${actualExt}`;
+
     const thumbnailBlob = await resizeImage(file, 400, 400, 0.8);
-    const thumbnailPath = `${folder}/thumbnails/${fileName}.${fileExt}`;
+    const thumbnailPath = `${folder}/thumbnails/${fileName}.${actualExt}`;
+
+    // Determine content type based on the processed blob type
+    const contentType = file.type === "image/png" ? "image/png" : "image/jpeg";
 
     // Upload original image
     const { error: originalError } = await supabase.storage
       .from("restaurant")
       .upload(originalPath, originalBlob, {
-        contentType: "image/jpeg",
+        contentType: contentType,
         upsert: false,
       });
 
@@ -160,7 +224,7 @@ export const uploadImageToSupabase = async (
     const { error: thumbnailError } = await supabase.storage
       .from("restaurant")
       .upload(thumbnailPath, thumbnailBlob, {
-        contentType: "image/jpeg",
+        contentType: contentType,
         upsert: false,
       });
 
@@ -170,7 +234,7 @@ export const uploadImageToSupabase = async (
       return { error: `Failed to upload thumbnail: ${thumbnailError.message}` };
     }
 
-    // Get public URLs (or signed URLs if bucket is private)
+    // Get public URLs
     const { data: originalData } = supabase.storage
       .from("restaurant")
       .getPublicUrl(originalPath);
@@ -207,12 +271,12 @@ export const deleteImageFromSupabase = async (
     }
 
     const imagePath = pathParts.slice(bucketIndex + 1).join("/");
-    
+
     // Create thumbnail path by replacing 'original' directory with 'thumbnails'
     const pathSegments = imagePath.split("/");
-    const thumbnailPath = pathSegments.map(segment => 
-      segment === "original" ? "thumbnails" : segment
-    ).join("/");
+    const thumbnailPath = pathSegments
+      .map((segment) => (segment === "original" ? "thumbnails" : segment))
+      .join("/");
 
     // Delete both original and thumbnail from storage
     const filesToDelete = [imagePath];
@@ -309,20 +373,27 @@ export const updateSubCategoryImages = async (
   }
 };
 
-// Upload logo image to Supabase (original only, no thumbnail)
+// Upload logo image to Supabase (original only, no thumbnail) with format preservation
 export const uploadLogoToSupabase = async (
   file: File,
   folder: string = "system/logos",
-  logoType?: 'light' | 'dark'
+  logoType?: "light" | "dark"
 ): Promise<{
   originalUrl?: string;
   error?: string;
 }> => {
   try {
     // Validate file type - only support SVG, PNG, JPG
-    const allowedTypes = ['image/svg+xml', 'image/png', 'image/jpeg', 'image/jpg'];
+    const allowedTypes = [
+      "image/svg+xml",
+      "image/png",
+      "image/jpeg",
+      "image/jpg",
+    ];
     if (!allowedTypes.includes(file.type)) {
-      return { error: "Please select a valid image file (SVG, PNG, or JPG only)" };
+      return {
+        error: "Please select a valid image file (SVG, PNG, or JPG only)",
+      };
     }
 
     // Validate file size (max 5MB for logos)
@@ -330,33 +401,67 @@ export const uploadLogoToSupabase = async (
       return { error: "Logo size must be less than 5MB" };
     }
 
-    const fileExt = file.name.split(".").pop();
+    const fileExt = file.name.split(".").pop()?.toLowerCase();
     const fileName = `${Date.now()}-${Math.random().toString(36).substring(2)}`;
 
-    // Create optimized logo (max 800x400 for logos) - preserve transparency
-    const logoBlob = await resizeLogoImage(file, 800, 400, 0.9);
-    
+    // Determine the correct file extension based on file type
+    let actualExt = fileExt;
+    if (file.type === "image/svg+xml") {
+      actualExt = "svg";
+    } else if (file.type === "image/png") {
+      actualExt = "png";
+    } else if (file.type === "image/jpeg" || file.type === "image/jpg") {
+      actualExt = "jpg";
+    }
+
     // Organize logos by type in separate folders
     const logoSubfolder = logoType ? `${folder}/${logoType}` : folder;
-    const logoPath = `${logoSubfolder}/${fileName}.${fileExt}`;
+    const logoPath = `${logoSubfolder}/${fileName}.${actualExt}`;
+
+    // For SVG files, upload directly without processing
+    if (file.type === "image/svg+xml") {
+      const { error: logoError } = await supabase.storage
+        .from("restaurant")
+        .upload(logoPath, file, {
+          contentType: file.type,
+          upsert: false,
+        });
+
+      if (logoError) {
+        console.error("Error uploading SVG logo:", logoError);
+        return { error: `Failed to upload logo: ${logoError.message}` };
+      }
+
+      // Get public URL for logo
+      const { data: logoUrlData } = supabase.storage
+        .from("restaurant")
+        .getPublicUrl(logoPath);
+
+      return {
+        originalUrl: logoUrlData.publicUrl,
+      };
+    }
+
+    // For raster images (PNG/JPG), create optimized logo preserving transparency
+    const logoBlob = await resizeLogoImage(file, 800, 400, 0.9);
 
     // Upload logo to Supabase Storage
-     const { error: logoError } = await supabase.storage
-       .from("restaurant")
-       .upload(logoPath, logoBlob, {
-         contentType: file.type,
-         upsert: false
-       });
+    const { error: logoError } = await supabase.storage
+      .from("restaurant")
+      .upload(logoPath, logoBlob, {
+        contentType: file.type,
+        upsert: false,
+      });
 
-     if (logoError) {
-       console.error("Error uploading logo:", logoError);
-       return { error: `Failed to upload logo: ${logoError.message}` };
-     }
+    if (logoError) {
+      console.error("Error uploading logo:", logoError);
+      return { error: `Failed to upload logo: ${logoError.message}` };
+    }
 
-     // Get public URL for logo
-     const { data: logoUrlData } = supabase.storage
-       .from("restaurant")
-       .getPublicUrl(logoPath);
+    // Get public URL for logo
+    const { data: logoUrlData } = supabase.storage
+      .from("restaurant")
+      .getPublicUrl(logoPath);
 
     return {
       originalUrl: logoUrlData.publicUrl,

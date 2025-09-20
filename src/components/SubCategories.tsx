@@ -49,7 +49,7 @@ function SubCategories({
                       : "text-white"
                     : theme.isDark
                     ? "text-gray-300"
-                    : "text-gray-600"
+                    : "text-[#313234]"
                 } `}
               />
             )}

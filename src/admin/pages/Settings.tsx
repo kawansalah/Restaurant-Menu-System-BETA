@@ -5,10 +5,10 @@ import { defaultAdminConfig } from "@/admin/config/adminConfig";
 import { useAdminAuth } from "@/admin/contexts/AdminAuthContext";
 import { Input } from "@/admin/components/Input";
 import Button from "@/components/Button";
-import { 
-  Settings as SettingsIcon, 
-  Globe, 
-  Palette, 
+import {
+  Settings as SettingsIcon,
+  Globe,
+  Palette,
   Database,
   Mail,
   Lock,
@@ -16,9 +16,13 @@ import {
   RefreshCw,
   Upload,
   Image as ImageIcon,
-  Trash2
+  Trash2,
 } from "lucide-react";
-import { saveAppearanceSettings, fetchAppearanceSettings, deleteLogo } from "@/admin/services/settingsService";
+import {
+  saveAppearanceSettings,
+  fetchAppearanceSettings,
+  deleteLogo,
+} from "@/admin/services/settingsService";
 import { useAlerts } from "@/hooks/useAlerts";
 
 interface SettingsSection {
@@ -43,7 +47,7 @@ const Settings: React.FC = () => {
   const alerts = useAlerts();
   const { user } = useAdminAuth();
   const [activeSection, setActiveSection] = useState<string>("general");
-  
+
   // Add state for appearance settings
   const [lightLogo, setLightLogo] = useState<File | null>(null);
   const [darkLogo, setDarkLogo] = useState<File | null>(null);
@@ -90,20 +94,20 @@ const Settings: React.FC = () => {
     //   color: 'purple'
     // },
     {
-      id: 'appearance',
+      id: "appearance",
       title: {
-        ku: 'ڕووکار',
-        ar: 'المظهر',
-        en: 'Appearance'
+        ku: "ڕووکار",
+        ar: "المظهر",
+        en: "Appearance",
       },
       description: {
-        ku: 'ڕێکخستنی ڕووکار',
-        ar: 'إعدادات المظهر',
-        en: 'Theme and display preferences'
+        ku: "ڕێکخستنی ڕووکار",
+        ar: "إعدادات المظهر",
+        en: "Theme and display preferences",
       },
       icon: Palette,
-      color: 'indigo'
-    }
+      color: "indigo",
+    },
   ];
 
   const handleSectionClick = (sectionId: string) => {
@@ -113,43 +117,53 @@ const Settings: React.FC = () => {
   const handleSave = async () => {
     setIsSaving(true);
     // Simulate save operation
-    await new Promise(resolve => setTimeout(resolve, 1000));
+    await new Promise((resolve) => setTimeout(resolve, 1000));
     setIsSaving(false);
   };
 
   const handleRefresh = async () => {
     setIsLoading(true);
     // Simulate refresh operation
-    await new Promise(resolve => setTimeout(resolve, 800));
+    await new Promise((resolve) => setTimeout(resolve, 800));
     setIsLoading(false);
   };
 
   // Handle logo file change
-  const handleLogoChange = (files: FileList | null, logoType: 'light' | 'dark') => {
+  const handleLogoChange = (
+    files: FileList | null,
+    logoType: "light" | "dark"
+  ) => {
     if (files && files[0]) {
       const file = files[0];
-      
+
       // Validate file type - only support SVG, PNG, JPG
-      const allowedTypes = ['image/svg+xml', 'image/png', 'image/jpeg', 'image/jpg'];
+      const allowedTypes = [
+        "image/svg+xml",
+        "image/png",
+        "image/jpeg",
+        "image/jpg",
+      ];
       if (!allowedTypes.includes(file.type)) {
         alerts.showError(
-          language === "ku" ? "تکایە فایلێکی دروست هەڵبژێرە (تەنها SVG، PNG، یان JPG)" :
-          language === "ar" ? "يرجى اختيار ملف صالح (SVG أو PNG أو JPG فقط)" :
-          "Please select a valid image file (SVG, PNG, or JPG only)"
+          language === "ku"
+            ? "تکایە فایلێکی دروست هەڵبژێرە (تەنها SVG، PNG، یان JPG)"
+            : language === "ar"
+            ? "يرجى اختيار ملف صالح (SVG أو PNG أو JPG فقط)"
+            : "Please select a valid image file (SVG, PNG, or JPG only)"
         );
         return;
       }
-      
-      if (logoType === 'light') {
+
+      if (logoType === "light") {
         setLightLogo(file);
       } else {
         setDarkLogo(file);
       }
-      
+
       // Create preview URL
       const reader = new FileReader();
       reader.onload = (e) => {
-        if (logoType === 'light') {
+        if (logoType === "light") {
           setLightLogoPreview(e.target?.result as string);
         } else {
           setDarkLogoPreview(e.target?.result as string);
@@ -165,14 +179,14 @@ const Settings: React.FC = () => {
   };
 
   // Handle logo deletion
-  const handleDeleteLogo = async (logoType: 'light' | 'dark') => {
+  const handleDeleteLogo = async (logoType: "light" | "dark") => {
     try {
       setIsSaving(true);
       // The service will automatically use the current user's restaurant_id
       const result = await deleteLogo(logoType);
-      
+
       if (result.success) {
-        if (logoType === 'light') {
+        if (logoType === "light") {
           setLightLogo(null);
           setLightLogoPreview(null);
         } else {
@@ -180,24 +194,30 @@ const Settings: React.FC = () => {
           setDarkLogoPreview(null);
         }
         alerts.showSuccess(
-          language === "ku" ? "لۆگۆ بە سەرکەوتوویی سڕایەوە!" :
-          language === "ar" ? "تم حذف الشعار بنجاح!" :
-          "Logo deleted successfully!"
+          language === "ku"
+            ? "لۆگۆ بە سەرکەوتوویی سڕایەوە!"
+            : language === "ar"
+            ? "تم حذف الشعار بنجاح!"
+            : "Logo deleted successfully!"
         );
       } else {
-        console.error('Failed to delete logo:', result.error);
+        console.error("Failed to delete logo:", result.error);
         alerts.showError(
-          language === "ku" ? `شکستی سڕینەوەی لۆگۆ: ${result.error}` :
-          language === "ar" ? `فشل في حذف الشعار: ${result.error}` :
-          `Failed to delete logo: ${result.error}`
+          language === "ku"
+            ? `شکستی سڕینەوەی لۆگۆ: ${result.error}`
+            : language === "ar"
+            ? `فشل في حذف الشعار: ${result.error}`
+            : `Failed to delete logo: ${result.error}`
         );
       }
     } catch (error) {
-      console.error('Failed to delete logo:', error);
+      console.error("Failed to delete logo:", error);
       alerts.showError(
-        language === "ku" ? "هەڵەیەکی چاوەڕوان نەکراو ڕوویدا لە کاتی سڕینەوەی لۆگۆ." :
-        language === "ar" ? "حدث خطأ غير متوقع أثناء حذف الشعار." :
-        "An unexpected error occurred while deleting the logo."
+        language === "ku"
+          ? "هەڵەیەکی چاوەڕوان نەکراو ڕوویدا لە کاتی سڕینەوەی لۆگۆ."
+          : language === "ar"
+          ? "حدث خطأ غير متوقع أثناء حذف الشعار."
+          : "An unexpected error occurred while deleting the logo."
       );
     } finally {
       setIsSaving(false);
@@ -210,32 +230,42 @@ const Settings: React.FC = () => {
     try {
       // Save both light and dark logos using the updated service
       // The service will automatically use the current user's restaurant_id
-      const result = await saveAppearanceSettings(lightLogo, darkLogo, themeColor);
-      
+      const result = await saveAppearanceSettings(
+        lightLogo,
+        darkLogo,
+        themeColor
+      );
+
       if (result.success) {
         alerts.showSuccess(
-          language === "ku" ? "ڕێکخستنەکانی ڕووکار بە سەرکەوتوویی پاشەکەوت کران!" :
-          language === "ar" ? "تم حفظ إعدادات المظهر بنجاح!" :
-          "Appearance settings saved successfully!"
+          language === "ku"
+            ? "ڕێکخستنەکانی ڕووکار بە سەرکەوتوویی پاشەکەوت کران!"
+            : language === "ar"
+            ? "تم حفظ إعدادات المظهر بنجاح!"
+            : "Appearance settings saved successfully!"
         );
-        
+
         // Clear the file inputs after successful save
         setLightLogo(null);
         setDarkLogo(null);
       } else {
-        console.error('Failed to save appearance settings:', result.error);
+        console.error("Failed to save appearance settings:", result.error);
         alerts.showError(
-          language === "ku" ? `شکستی پاشەکەوتکردنی ڕێکخستنەکان: ${result.error}` :
-          language === "ar" ? `فشل في حفظ الإعدادات: ${result.error}` :
-          `Failed to save settings: ${result.error}`
+          language === "ku"
+            ? `شکستی پاشەکەوتکردنی ڕێکخستنەکان: ${result.error}`
+            : language === "ar"
+            ? `فشل في حفظ الإعدادات: ${result.error}`
+            : `Failed to save settings: ${result.error}`
         );
       }
     } catch (error) {
-      console.error('Failed to save appearance settings:', error);
+      console.error("Failed to save appearance settings:", error);
       alerts.showError(
-        language === "ku" ? "هەڵەیەکی چاوەڕوان نەکراو ڕوویدا لە کاتی پاشەکەوتکردنی ڕێکخستنەکان." :
-        language === "ar" ? "حدث خطأ غير متوقع أثناء حفظ الإعدادات." :
-        "An unexpected error occurred while saving settings."
+        language === "ku"
+          ? "هەڵەیەکی چاوەڕوان نەکراو ڕوویدا لە کاتی پاشەکەوتکردنی ڕێکخستنەکان."
+          : language === "ar"
+          ? "حدث خطأ غير متوقع أثناء حفظ الإعدادات."
+          : "An unexpected error occurred while saving settings."
       );
     } finally {
       setIsSaving(false);
@@ -256,19 +286,19 @@ const Settings: React.FC = () => {
             // Fallback to legacy logo_url for backward compatibility
             setLightLogoPreview(settings.logo_url);
           }
-          
+
           // Load dark logo
           if (settings.dark_logo_url) {
             setDarkLogoPreview(settings.dark_logo_url);
           }
-          
+
           // Load theme color
           if (settings.theme_color) {
             setThemeColor(settings.theme_color);
           }
         }
       } catch (error) {
-        console.error('Failed to load appearance settings:', error);
+        console.error("Failed to load appearance settings:", error);
       }
     };
 
@@ -279,24 +309,28 @@ const Settings: React.FC = () => {
     <div className={`min-h-screen ${theme.bgPrimary} py-6`}>
       <div className="w-full mx-auto space-y-6">
         {/* Header Section */}
-        <div className={`${theme.bgButtomNavigation} rounded-3xl p-6 ${theme.topbarShadowStyle} border ${theme.borderSubCategory}`}>
+        <div
+          className={`${theme.bgButtomNavigation} rounded-3xl p-6 ${theme.topbarShadowStyle} border ${theme.borderSubCategory}`}
+        >
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div>
-              <h1 className={`text-3xl font-bold ${
-                theme.isDark ? theme.buttonTextPrimary : theme.textPrimary
-              } mb-2`}>
-                {
-                  language === "ku" ? "ڕێکخستنەکان" :
-                  language === "ar" ? "الإعدادات" :
-                  "Settings"
-                }
+              <h1
+                className={`text-3xl font-bold ${
+                  theme.isDark ? theme.buttonTextPrimary : theme.textPrimary
+                } mb-2`}
+              >
+                {language === "ku"
+                  ? "ڕێکخستنەکان"
+                  : language === "ar"
+                  ? "الإعدادات"
+                  : "Settings"}
               </h1>
               <p className={`text-lg ${theme.textSecondary}`}>
-                {
-                  language === "ku" ? "سیستەمەکەت بەڕێوە ببە و ڕێکی بخە" :
-                  language === "ar" ? "إدارة وتكوين إعدادات النظام" :
-                  "Manage and configure your system settings"
-                }
+                {language === "ku"
+                  ? "سیستەمەکەت بەڕێوە ببە و ڕێکی بخە"
+                  : language === "ar"
+                  ? "إدارة وتكوين إعدادات النظام"
+                  : "Manage and configure your system settings"}
               </p>
             </div>
             {/* <div className="flex items-center gap-3">
@@ -332,52 +366,72 @@ const Settings: React.FC = () => {
           {settingsSections.map((section) => {
             const IconComponent = section.icon;
             const isActive = activeSection === section.id;
-            
+
             return (
               <div
                 key={section.id}
                 onClick={() => handleSectionClick(section.id)}
-                className={`${theme.bgButtomNavigation} rounded-3xl p-6 ${theme.topbarShadowStyle} border ${
+                className={`${theme.bgButtomNavigation} rounded-3xl p-6 ${
+                  theme.topbarShadowStyle
+                } border ${
                   isActive ? theme.borderMain : theme.borderSubCategory
                 } cursor-pointer transition-all duration-300 hover:scale-105 ${
-                  isActive ? 'ring-2 ring-[var(--bg-main)] ring-opacity-50' : ''
+                  isActive ? "ring-2 ring-[var(--bg-main)] ring-opacity-50" : ""
                 }`}
               >
                 <div className="flex items-start gap-4">
-                  <div className={`p-3 rounded-2xl ${
-                    section.color === 'blue' ? 'bg-blue-100 dark:bg-blue-900/30' :
-                    section.color === 'purple' ? 'bg-purple-100 dark:bg-purple-900/30' :
-                    section.color === 'indigo' ? 'bg-indigo-100 dark:bg-indigo-900/30' :
-                    'bg-gray-100 dark:bg-gray-900/30'
-                  }`}>
-                    <IconComponent className={`w-6 h-6 ${
-                      section.color === 'blue' ? 'text-blue-600 dark:text-blue-400' :
-                      section.color === 'purple' ? 'text-purple-600 dark:text-purple-400' :
-                      section.color === 'indigo' ? 'text-indigo-600 dark:text-indigo-400' :
-                      theme.textSecondary
-                    }`} />
+                  <div
+                    className={`p-3 rounded-2xl ${
+                      section.color === "blue"
+                        ? "bg-blue-100 dark:bg-blue-900/30"
+                        : section.color === "purple"
+                        ? "bg-purple-100 dark:bg-purple-900/30"
+                        : section.color === "indigo"
+                        ? "bg-indigo-100 dark:bg-indigo-900/30"
+                        : "bg-gray-100 dark:bg-gray-900/30"
+                    }`}
+                  >
+                    <IconComponent
+                      className={`w-6 h-6 ${
+                        section.color === "blue"
+                          ? "text-blue-600 dark:text-blue-400"
+                          : section.color === "purple"
+                          ? "text-purple-600 dark:text-purple-400"
+                          : section.color === "indigo"
+                          ? "text-indigo-600 dark:text-indigo-400"
+                          : theme.textSecondary
+                      }`}
+                    />
                   </div>
                   <div className="flex-1">
-                    <h3 className={`text-xl font-bold ${
-                      theme.isDark ? theme.buttonTextPrimary : theme.textPrimary
-                    } mb-2`}>
+                    <h3
+                      className={`text-xl font-bold ${
+                        theme.isDark
+                          ? theme.buttonTextPrimary
+                          : theme.textPrimary
+                      } mb-2`}
+                    >
                       {getLocalizedText(section.title)}
                     </h3>
-                    <p className={`${theme.textSecondary} text-sm leading-relaxed`}>
+                    <p
+                      className={`${theme.textSecondary} text-sm leading-relaxed`}
+                    >
                       {getLocalizedText(section.description)}
                     </p>
                   </div>
                 </div>
-                
+
                 {isActive && (
                   <div className="mt-4 pt-4 border-t border-opacity-20 border-gray-300 dark:border-gray-600">
-                    <div className={`text-xs ${theme.textSecondary} flex items-center gap-1`}>
+                    <div
+                      className={`text-xs ${theme.textSecondary} flex items-center gap-1`}
+                    >
                       <div className="w-2 h-2 bg-[var(--bg-main)] rounded-full animate-pulse"></div>
-                      {
-                        language === "ku" ? "هەڵبژێردراو" :
-                        language === "ar" ? "محدد" :
-                        "Selected"
-                      }
+                      {language === "ku"
+                        ? "هەڵبژێردراو"
+                        : language === "ar"
+                        ? "محدد"
+                        : "Selected"}
                     </div>
                   </div>
                 )}
@@ -387,30 +441,48 @@ const Settings: React.FC = () => {
         </div>
 
         {/* Active Section Content */}
-        <div className={`${theme.bgButtomNavigation} rounded-3xl p-6 ${theme.topbarShadowStyle} border ${theme.borderSubCategory}`}>
+        <div
+          className={`${theme.bgButtomNavigation} rounded-3xl p-6 ${theme.topbarShadowStyle} border ${theme.borderSubCategory}`}
+        >
           <div className="flex items-center gap-3 mb-6">
             {(() => {
-              const activeSettingsSection = settingsSections.find(s => s.id === activeSection);
+              const activeSettingsSection = settingsSections.find(
+                (s) => s.id === activeSection
+              );
               if (activeSettingsSection) {
                 const IconComponent = activeSettingsSection.icon;
                 return (
                   <>
-                    <div className={`p-2 rounded-xl ${
-                      activeSettingsSection.color === 'blue' ? 'bg-blue-100 dark:bg-blue-900/30' :
-                      activeSettingsSection.color === 'purple' ? 'bg-purple-100 dark:bg-purple-900/30' :
-                      activeSettingsSection.color === 'indigo' ? 'bg-indigo-100 dark:bg-indigo-900/30' :
-                      'bg-gray-100 dark:bg-gray-900/30'
-                    }`}>
-                      <IconComponent className={`w-5 h-5 ${
-                        activeSettingsSection.color === 'blue' ? 'text-blue-600 dark:text-blue-400' :
-                        activeSettingsSection.color === 'purple' ? 'text-purple-600 dark:text-purple-400' :
-                        activeSettingsSection.color === 'indigo' ? 'text-indigo-600 dark:text-indigo-400' :
-                        theme.textSecondary
-                      }`} />
+                    <div
+                      className={`p-2 rounded-xl ${
+                        activeSettingsSection.color === "blue"
+                          ? "bg-blue-100 dark:bg-blue-900/30"
+                          : activeSettingsSection.color === "purple"
+                          ? "bg-purple-100 dark:bg-purple-900/30"
+                          : activeSettingsSection.color === "indigo"
+                          ? "bg-indigo-100 dark:bg-indigo-900/30"
+                          : "bg-gray-100 dark:bg-gray-900/30"
+                      }`}
+                    >
+                      <IconComponent
+                        className={`w-5 h-5 ${
+                          activeSettingsSection.color === "blue"
+                            ? "text-blue-600 dark:text-blue-400"
+                            : activeSettingsSection.color === "purple"
+                            ? "text-purple-600 dark:text-purple-400"
+                            : activeSettingsSection.color === "indigo"
+                            ? "text-indigo-600 dark:text-indigo-400"
+                            : theme.textSecondary
+                        }`}
+                      />
                     </div>
-                    <h2 className={`text-2xl font-bold ${
-                      theme.isDark ? theme.buttonTextPrimary : theme.textPrimary
-                    }`}>
+                    <h2
+                      className={`text-2xl font-bold ${
+                        theme.isDark
+                          ? theme.buttonTextPrimary
+                          : theme.textPrimary
+                      }`}
+                    >
                       {getLocalizedText(activeSettingsSection.title)}
                     </h2>
                   </>
@@ -419,62 +491,76 @@ const Settings: React.FC = () => {
               return null;
             })()}
           </div>
-          
-          <div className={`${theme.bgSearchBar} rounded-2xl p-6 border ${theme.borderSubCategory}`}>
+
+          <div
+            className={`${theme.bgSearchBar} rounded-2xl p-6 border ${theme.borderSubCategory}`}
+          >
             {activeSection === "appearance" ? (
               <div className="space-y-8">
                 {/* Logo Upload Section */}
                 <div className="space-y-6">
-                  <h3 className={`text-lg font-semibold ${
-                    theme.isDark ? theme.buttonTextPrimary : theme.textPrimary
-                  }`}>
-                    {
-                      language === "ku" ? "لۆگۆی سیستەم" :
-                      language === "ar" ? "شعار النظام" :
-                      "System Logos"
-                    }
+                  <h3
+                    className={`text-lg font-semibold ${
+                      theme.isDark ? theme.buttonTextPrimary : theme.textPrimary
+                    }`}
+                  >
+                    {language === "ku"
+                      ? "لۆگۆی سیستەم"
+                      : language === "ar"
+                      ? "شعار النظام"
+                      : "System Logos"}
                   </h3>
                   <p className={`text-sm ${theme.textSecondary} mb-4`}>
-                    {
-                      language === "ku" ? "لۆگۆی جیاواز بۆ دۆخی ڕووناکی و تاریکی باربکە. قەبارەی پێشنیارکراو: ٢٠٠x٨٠ پیکسڵ" :
-                      language === "ar" ? "ارفع شعارات مختلفة للمظهر الفاتح والداكن. الحجم المقترح: 200x80 بكسل" :
-                      "Upload different logos for light and dark themes. Recommended size: 200x80px"
-                    }
+                    {language === "ku"
+                      ? "لۆگۆی جیاواز بۆ دۆخی ڕووناکی و تاریکی باربکە. قەبارەی پێشنیارکراو: ٢٠٠x٨٠ پیکسڵ"
+                      : language === "ar"
+                      ? "ارفع شعارات مختلفة للمظهر الفاتح والداكن. الحجم المقترح: 200x80 بكسل"
+                      : "Upload different logos for light and dark themes. Recommended size: 200x80px"}
                   </p>
-                  
+
                   {/* Light Logo Section */}
                   <div className="space-y-3">
-                    <h4 className={`text-md font-medium ${
-                      theme.isDark ? theme.buttonTextPrimary : theme.textPrimary
-                    }`}>
-                      {
-                        language === "ku" ? "لۆگۆی ڕووکاری ڕووناک" :
-                        language === "ar" ? "شعار المظهر الفاتح" :
-                        "Light Theme Logo"
-                      }
+                    <h4
+                      className={`text-md font-medium ${
+                        theme.isDark
+                          ? theme.buttonTextPrimary
+                          : theme.textPrimary
+                      }`}
+                    >
+                      {language === "ku"
+                        ? "لۆگۆی ڕووکاری ڕووناک"
+                        : language === "ar"
+                        ? "شعار المظهر الفاتح"
+                        : "Light Theme Logo"}
                     </h4>
-                    
+
                     {/* Light Logo Preview */}
                     {lightLogoPreview && (
-                      <div className={`p-4 rounded-xl ${theme.bgCard} border ${theme.borderSubCategory}`}>
+                      <div
+                        className={`p-4 rounded-xl ${theme.bgCard} border ${theme.borderSubCategory}`}
+                      >
                         <div className="flex items-center justify-between">
                           <div className="flex items-center gap-4">
                             <div className="w-20 h-20 rounded-lg overflow-hidden bg-white flex items-center justify-center">
-                              <img 
-                                src={lightLogoPreview} 
-                                alt="Light Logo Preview" 
+                              <img
+                                src={lightLogoPreview}
+                                alt="Light Logo Preview"
                                 className="max-w-full max-h-full object-contain"
                               />
                             </div>
                             <div>
-                              <p className={`font-medium ${
-                                theme.isDark ? theme.buttonTextPrimary : theme.textPrimary
-                              }`}>
-                                {
-                                  language === "ku" ? "لۆگۆ بۆ دۆخی ڕووناکی" :
-                                  language === "ar" ? "معاينة الشعار الفاتح" :
-                                  "Light Logo Preview"
-                                }
+                              <p
+                                className={`font-medium ${
+                                  theme.isDark
+                                    ? theme.buttonTextPrimary
+                                    : theme.textPrimary
+                                }`}
+                              >
+                                {language === "ku"
+                                  ? "لۆگۆ بۆ دۆخی ڕووناکی"
+                                  : language === "ar"
+                                  ? "معاينة الشعار الفاتح"
+                                  : "Light Logo Preview"}
                               </p>
                               <p className={`text-sm ${theme.textSecondary}`}>
                                 {lightLogo?.name}
@@ -482,67 +568,81 @@ const Settings: React.FC = () => {
                             </div>
                           </div>
                           <button
-                             onClick={() => handleDeleteLogo('light')}
-                             disabled={isSaving}
-                             className={`p-2 rounded-lg hover:bg-red-100 dark:hover:bg-red-900/30 transition-colors group disabled:opacity-50 disabled:cursor-not-allowed`}
-                             title={
-                               language === "ku" ? "سڕینەوەی لۆگۆ" :
-                               language === "ar" ? "حذف الشعار الفاتح" :
-                               "Delete Light Logo"
-                             }
-                           >
-                             <Trash2 className="w-5 h-5 text-red-500 group-hover:text-red-600" />
-                           </button>
+                            onClick={() => handleDeleteLogo("light")}
+                            disabled={isSaving}
+                            className={`p-2 rounded-lg hover:bg-red-100 dark:hover:bg-red-900/30 transition-colors group disabled:opacity-50 disabled:cursor-not-allowed`}
+                            title={
+                              language === "ku"
+                                ? "سڕینەوەی لۆگۆ"
+                                : language === "ar"
+                                ? "حذف الشعار الفاتح"
+                                : "Delete Light Logo"
+                            }
+                          >
+                            <Trash2 className="w-5 h-5 text-red-500 group-hover:text-red-600" />
+                          </button>
                         </div>
                       </div>
                     )}
-                    
+
                     <Input
                       type="file"
-                      accept="image/*"
-                      onFileChange={(files) => handleLogoChange(files, 'light')}
+                      accept="image/png,image/jpeg,image/jpg,image/svg+xml"
+                      onFileChange={(files) => handleLogoChange(files, "light")}
                       placeholder={
-                        language === "ku" ? "لۆگۆکەت باربکە" :
-                        language === "ar" ? "ارفع الشعار الفاتح" :
-                        "Upload Light Logo"
+                        language === "ku"
+                          ? "لۆگۆکەت باربکە"
+                          : language === "ar"
+                          ? "ارفع الشعار الفاتح"
+                          : "Upload Light Logo"
                       }
                       icon={<ImageIcon />}
                     />
                   </div>
-                  
+
                   {/* Dark Logo Section */}
                   <div className="space-y-3">
-                    <h4 className={`text-md font-medium ${
-                      theme.isDark ? theme.buttonTextPrimary : theme.textPrimary
-                    }`}>
-                      {
-                        language === "ku" ? "لۆگۆی بۆ دۆخی تاریکی" :
-                        language === "ar" ? "شعار المظهر الداكن" :
-                        "Dark Theme Logo"
-                      }
+                    <h4
+                      className={`text-md font-medium ${
+                        theme.isDark
+                          ? theme.buttonTextPrimary
+                          : theme.textPrimary
+                      }`}
+                    >
+                      {language === "ku"
+                        ? "لۆگۆی بۆ دۆخی تاریکی"
+                        : language === "ar"
+                        ? "شعار المظهر الداكن"
+                        : "Dark Theme Logo"}
                     </h4>
-                    
+
                     {/* Dark Logo Preview */}
                     {darkLogoPreview && (
-                      <div className={`p-4 rounded-xl ${theme.bgCard} border ${theme.borderSubCategory}`}>
+                      <div
+                        className={`p-4 rounded-xl ${theme.bgCard} border ${theme.borderSubCategory}`}
+                      >
                         <div className="flex items-center justify-between">
                           <div className="flex items-center gap-4">
                             <div className="w-20 h-20 rounded-lg overflow-hidden bg-gray-800 flex items-center justify-center">
-                              <img 
-                                src={darkLogoPreview} 
-                                alt="Dark Logo Preview" 
+                              <img
+                                src={darkLogoPreview}
+                                alt="Dark Logo Preview"
                                 className="max-w-full max-h-full object-contain"
                               />
                             </div>
                             <div>
-                              <p className={`font-medium ${
-                                theme.isDark ? theme.buttonTextPrimary : theme.textPrimary
-                              }`}>
-                                {
-                                  language === "ku" ? "لۆگۆ بۆ دۆخی تاریکی" :
-                                  language === "ar" ? "معاينة الشعار الداكن" :
-                                  "Dark Logo Preview"
-                                }
+                              <p
+                                className={`font-medium ${
+                                  theme.isDark
+                                    ? theme.buttonTextPrimary
+                                    : theme.textPrimary
+                                }`}
+                              >
+                                {language === "ku"
+                                  ? "لۆگۆ بۆ دۆخی تاریکی"
+                                  : language === "ar"
+                                  ? "معاينة الشعار الداكن"
+                                  : "Dark Logo Preview"}
                               </p>
                               <p className={`text-sm ${theme.textSecondary}`}>
                                 {darkLogo?.name}
@@ -550,29 +650,33 @@ const Settings: React.FC = () => {
                             </div>
                           </div>
                           <button
-                             onClick={() => handleDeleteLogo('dark')}
-                             disabled={isSaving}
-                             className={`p-2 rounded-lg hover:bg-red-100 dark:hover:bg-red-900/30 transition-colors group disabled:opacity-50 disabled:cursor-not-allowed`}
-                             title={
-                               language === "ku" ? "سڕینەوەی لۆگۆ" :
-                               language === "ar" ? "حذف الشعار الداكن" :
-                               "Delete Dark Logo"
-                             }
-                           >
-                             <Trash2 className="w-5 h-5 text-red-500 group-hover:text-red-600" />
-                           </button>
+                            onClick={() => handleDeleteLogo("dark")}
+                            disabled={isSaving}
+                            className={`p-2 rounded-lg hover:bg-red-100 dark:hover:bg-red-900/30 transition-colors group disabled:opacity-50 disabled:cursor-not-allowed`}
+                            title={
+                              language === "ku"
+                                ? "سڕینەوەی لۆگۆ"
+                                : language === "ar"
+                                ? "حذف الشعار الداكن"
+                                : "Delete Dark Logo"
+                            }
+                          >
+                            <Trash2 className="w-5 h-5 text-red-500 group-hover:text-red-600" />
+                          </button>
                         </div>
                       </div>
                     )}
-                    
+
                     <Input
                       type="file"
-                      accept="image/*"
-                      onFileChange={(files) => handleLogoChange(files, 'dark')}
+                      accept="image/png,image/jpeg,image/jpg,image/svg+xml"
+                      onFileChange={(files) => handleLogoChange(files, "dark")}
                       placeholder={
-                        language === "ku" ? "لۆگۆکەت باربکە" :
-                        language === "ar" ? "ارفع الشعار الداكن" :
-                        "Upload Dark Logo"
+                        language === "ku"
+                          ? "لۆگۆکەت باربکە"
+                          : language === "ar"
+                          ? "ارفع الشعار الداكن"
+                          : "Upload Dark Logo"
                       }
                       icon={<ImageIcon />}
                     />
@@ -581,55 +685,67 @@ const Settings: React.FC = () => {
 
                 {/* Theme Color Section */}
                 <div className="space-y-4">
-                  <h3 className={`text-lg font-semibold ${
-                    theme.isDark ? theme.buttonTextPrimary : theme.textPrimary
-                  }`}>
-                    {
-                      language === "ku" ? "ڕەنگی سەرەکی" :
-                      language === "ar" ? "اللون الأساسي" :
-                      "Primary Theme Color"
-                    }
+                  <h3
+                    className={`text-lg font-semibold ${
+                      theme.isDark ? theme.buttonTextPrimary : theme.textPrimary
+                    }`}
+                  >
+                    {language === "ku"
+                      ? "ڕەنگی سەرەکی"
+                      : language === "ar"
+                      ? "اللون الأساسي"
+                      : "Primary Theme Color"}
                   </h3>
                   <p className={`text-sm ${theme.textSecondary} mb-4`}>
-                    {
-                      language === "ku" ? "ڕەنگی سەرەکی بۆ ناوەڕۆکی سیستەمەکەت هەڵبژێرە" :
-                      language === "ar" ? "اختر اللون الأساسي لواجهة النظام" :
-                      "Choose the primary color for your system interface"
-                    }
+                    {language === "ku"
+                      ? "ڕەنگی سەرەکی بۆ ناوەڕۆکی سیستەمەکەت هەڵبژێرە"
+                      : language === "ar"
+                      ? "اختر اللون الأساسي لواجهة النظام"
+                      : "Choose the primary color for your system interface"}
                   </p>
-                  
+
                   {/* Color Preview */}
-                  <div className={`p-4 rounded-xl ${theme.bgCard} border ${theme.borderSubCategory}`}>
+                  <div
+                    className={`p-4 rounded-xl ${theme.bgCard} border ${theme.borderSubCategory}`}
+                  >
                     <div className="flex items-center gap-4">
-                      <div 
+                      <div
                         className="w-16 h-16 rounded-lg border-2 border-gray-200 dark:border-gray-600"
                         style={{ backgroundColor: themeColor }}
                       ></div>
                       <div>
-                        <p className={`font-medium ${
-                          theme.isDark ? theme.buttonTextPrimary : theme.textPrimary
-                        }`}>
-                          {
-                            language === "ku" ? "ڕەنگی هەڵبژێردراو" :
-                            language === "ar" ? "اللون المحدد" :
-                            "Selected Color"
-                          }
+                        <p
+                          className={`font-medium ${
+                            theme.isDark
+                              ? theme.buttonTextPrimary
+                              : theme.textPrimary
+                          }`}
+                        >
+                          {language === "ku"
+                            ? "ڕەنگی هەڵبژێردراو"
+                            : language === "ar"
+                            ? "اللون المحدد"
+                            : "Selected Color"}
                         </p>
-                        <p className={`text-sm ${theme.textSecondary} font-mono`}>
+                        <p
+                          className={`text-sm ${theme.textSecondary} font-mono`}
+                        >
                           {themeColor.toUpperCase()}
                         </p>
                       </div>
                     </div>
                   </div>
-                  
+
                   <Input
                     type="color"
                     value={themeColor}
                     onChange={handleThemeColorChange}
                     placeholder={
-                      language === "ku" ? "ڕەنگ هەڵبژێرە" :
-                      language === "ar" ? "اختر اللون" :
-                      "Select Color"
+                      language === "ku"
+                        ? "ڕەنگ هەڵبژێرە"
+                        : language === "ar"
+                        ? "اختر اللون"
+                        : "Select Color"
                     }
                     icon={<Palette />}
                   />
@@ -647,40 +763,44 @@ const Settings: React.FC = () => {
                     ) : (
                       <Save className="w-4 h-4" />
                     )}
-                    {
-                      isSaving ? (
-                        language === "ku" ? "پاشەکەوتکردن..." :
-                        language === "ar" ? "جاري الحفظ..." :
-                        "Saving..."
-                      ) : (
-                        language === "ku" ? "پاشەکەوتکردن" :
-                        language === "ar" ? "حفظ" :
-                        "Save Changes"
-                      )
-                    }
+                    {isSaving
+                      ? language === "ku"
+                        ? "پاشەکەوتکردن..."
+                        : language === "ar"
+                        ? "جاري الحفظ..."
+                        : "Saving..."
+                      : language === "ku"
+                      ? "پاشەکەوتکردن"
+                      : language === "ar"
+                      ? "حفظ"
+                      : "Save Changes"}
                   </Button>
                 </div>
               </div>
             ) : (
               <div className="text-center py-12">
-                <div className={`w-16 h-16 mx-auto mb-4 rounded-full ${theme.bgCard} flex items-center justify-center`}>
+                <div
+                  className={`w-16 h-16 mx-auto mb-4 rounded-full ${theme.bgCard} flex items-center justify-center`}
+                >
                   <SettingsIcon className={`w-8 h-8 ${theme.textSecondary}`} />
                 </div>
-                <h3 className={`text-lg font-semibold ${
-                  theme.isDark ? theme.buttonTextPrimary : theme.textPrimary
-                } mb-2`}>
-                  {
-                    language === "ku" ? "ڕێکخستنەکان لێرە دەبن" :
-                    language === "ar" ? "ستظهر الإعدادات هنا" :
-                    "Settings content will appear here"
-                  }
+                <h3
+                  className={`text-lg font-semibold ${
+                    theme.isDark ? theme.buttonTextPrimary : theme.textPrimary
+                  } mb-2`}
+                >
+                  {language === "ku"
+                    ? "ڕێکخستنەکان لێرە دەبن"
+                    : language === "ar"
+                    ? "ستظهر الإعدادات هنا"
+                    : "Settings content will appear here"}
                 </h3>
                 <p className={`${theme.textSecondary}`}>
-                  {
-                    language === "ku" ? "بەشێک هەڵبژێرە بۆ دەستکاریکردن" :
-                    language === "ar" ? "اختر قسماً للتحرير" :
-                    "Select a section to configure settings"
-                  }
+                  {language === "ku"
+                    ? "بەشێک هەڵبژێرە بۆ دەستکاریکردن"
+                    : language === "ar"
+                    ? "اختر قسماً للتحرير"
+                    : "Select a section to configure settings"}
                 </p>
               </div>
             )}
