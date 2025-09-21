@@ -16,6 +16,7 @@ interface MenuItemStats {
   availableItems: number;
   unavailableItems: number;
   averageRating: number;
+  totalRatings: number;
   totalViews: number;
 }
 
@@ -95,6 +96,17 @@ const MenuItemStatsCards: React.FC<MenuItemStatsCardsProps> = ({
     },
     {
       title: {
+        en: "Total Reviews",
+        ar: "إجمالي التقييمات",
+        ku: "کۆی پێداچوونەوەکان",
+      },
+      value: formatNumber(stats.totalRatings),
+      icon: Star,
+      color: "indigo",
+      trend: null,
+    },
+    {
+      title: {
         en: "Total Views",
         ar: "إجمالي المشاهدات",
         ku: "کۆی بینین",
@@ -104,7 +116,6 @@ const MenuItemStatsCards: React.FC<MenuItemStatsCardsProps> = ({
       color: "purple",
       trend: null,
     },
-
   ];
 
   const getColorClasses = (color: string) => {
@@ -132,10 +143,22 @@ const MenuItemStatsCards: React.FC<MenuItemStatsCardsProps> = ({
             `}
           >
             <div className="flex items-start gap-3 sm:gap-4">
-              <div className={`h-10 w-10 sm:h-12 sm:w-12 ${theme.isDark ? theme.bgCard : theme.bgRating} rounded-xl sm:rounded-2xl flex-shrink-0`}></div>
+              <div
+                className={`h-10 w-10 sm:h-12 sm:w-12 ${
+                  theme.isDark ? theme.bgCard : theme.bgRating
+                } rounded-xl sm:rounded-2xl flex-shrink-0`}
+              ></div>
               <div className="flex flex-col items-start justify-between min-w-0 flex-1">
-                <div className={`h-3 sm:h-4 ${theme.isDark ? theme.bgCard : theme.bgRating} rounded w-16 sm:w-20 mb-2`}></div>
-                <div className={`h-6 sm:h-8 ${theme.isDark ? theme.bgCard : theme.bgRating} rounded w-12 sm:w-16`}></div>
+                <div
+                  className={`h-3 sm:h-4 ${
+                    theme.isDark ? theme.bgCard : theme.bgRating
+                  } rounded w-16 sm:w-20 mb-2`}
+                ></div>
+                <div
+                  className={`h-6 sm:h-8 ${
+                    theme.isDark ? theme.bgCard : theme.bgRating
+                  } rounded w-12 sm:w-16`}
+                ></div>
               </div>
             </div>
           </div>
@@ -159,9 +182,7 @@ const MenuItemStatsCards: React.FC<MenuItemStatsCardsProps> = ({
           >
             <div className="flex items-start gap-3 sm:gap-4">
               <div
-                className={`w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl flex items-center justify-center flex-shrink-0 ${
-                  colorClass
-                }`}
+                className={`w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl flex items-center justify-center flex-shrink-0 ${colorClass}`}
               >
                 <Icon className="w-6 h-6 sm:w-8 sm:h-8 text-white dark:text-white" />
               </div>

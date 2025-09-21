@@ -75,6 +75,7 @@ const PaginatedMenuItemList: React.FC<PaginatedMenuItemListProps> = ({
     availableItems: 0,
     unavailableItems: 0,
     averageRating: 0,
+    totalRatings: 0,
     totalViews: 0,
   });
 
@@ -176,6 +177,11 @@ const PaginatedMenuItemList: React.FC<PaginatedMenuItemListProps> = ({
         ku: "هیچ هەڵسەنگاندنێک نییە",
         ar: "لا يوجد تقييم",
         en: "No rating",
+      },
+      reviewCount: {
+        ku: "ژمارەی پێداچوونەوە",
+        ar: "عدد التقييمات",
+        en: "Reviews",
       },
       makeUnavailable: {
         ku: "نابەردەست بکە",
@@ -544,6 +550,19 @@ const PaginatedMenuItemList: React.FC<PaginatedMenuItemListProps> = ({
           </div>
         );
       },
+    },
+    {
+      key: "rating_count",
+      title: getText("reviewCount"),
+      sortable: true,
+      align: "center" as const,
+      render: (_value: any, item: AdminMenuItem) => (
+        <div className="flex items-center justify-center">
+          <span className={`text-sm font-medium ${theme.textSecondary}`}>
+            {item.rating_count || 0}
+          </span>
+        </div>
+      ),
     },
     {
       key: "status",

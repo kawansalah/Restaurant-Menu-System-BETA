@@ -153,3 +153,87 @@ export const hasUserRated = async (menuItemId: string): Promise<boolean> => {
     return false; // If error, allow rating attempt
   }
 };
+
+/**
+ * Get ratings for a specific menu item and restaurant
+ * @param menuItemId - The UUID of the menu item
+ * @param restaurantId - The UUID of the restaurant
+ * @returns Promise with array of ratings
+ */
+export const getRatingsByMenuItemAndRestaurant = async (
+  menuItemId: string,
+  restaurantId: string
+): Promise<Rating[]> => {
+  try {
+    // First, verify that the menu item belongs to the specified restaurant
+    const { data: menuItemData, error: menuItemError } = await publicSupabase
+      .from("menu_items")
+      .select("restaurant_id")
+      .eq("id", menuItemId)
+      .single();
+
+    if (menuItemError) {
+      console.error("Error verifying menu item restaurant:", menuItemError);
+      throw new Error("Failed to verify menu item restaurant");
+    }
+
+    if (!menuItemData || menuItemData.restaurant_id !== restaurantId) {
+      throw new Error("Menu item does not belong to the specified restaurant");
+    }
+
+    // Get all ratings for the menu item
+    const { data, error } = await publicSupabase
+      .from("ratings")
+      .select("*")
+      .eq("menu_item_id", menuItemId)
+      .order("created_at", { ascending: false });
+
+    if (error) {
+      console.error("Error fetching ratings:", error);
+      throw new Error("Failed to fetch ratings");
+    }
+
+    return data || [];
+  } catch (error) {
+    console.error("Error in getRatingsByMenuItemAndRestaurant:", error);
+    throw error;
+  }
+};
+
+/**
+ * Get rating statistics for a specific menu item and restaurant
+ * @param menuItemId - The UUID of the menu item
+ * @param restaurantId - The UUID of the restaurant
+ * @returns Promise with rating statistics
+ */
+export const getRatingStatsByMenuItemAndRestaurant = async (
+  menuItemId: string,
+  restaurantId: string
+): Promise<RatingStats> => {
+  try {
+    // Get all ratings for the menu item and restaurant
+    const ratings = await getRatingsByMenuItemAndRestaurant(
+      menuItemId,
+      restaurantId
+    );
+
+    if (!ratings || ratings.length === 0) {
+      return {
+        average_rating: 0,
+        total_ratings: 0,
+      };
+    }
+
+    const totalRatings = ratings.length;
+    const sumRatings = ratings.reduce((sum, rating) => sum + rating.rating, 0);
+    const averageRating = Math.round((sumRatings / totalRatings) * 10) / 10; // Round to 1 decimal place
+
+    return {
+      average_rating: averageRating,
+      total_ratings: totalRatings,
+    };
+  } catch (error) {
+    console.error("Error in getRatingStatsByMenuItemAndRestaurant:", error);
+    throw error;
+  }
+};

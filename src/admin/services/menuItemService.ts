@@ -92,6 +92,36 @@ export const fetchMenuItems = async (
       return { data: [], error: error.message };
     }
 
+    // Get rating counts and calculate averages for all menu items
+    const menuItemIds = (data || []).map((item) => item.id);
+    let ratingCounts: { [key: string]: number } = {};
+    let ratingAverages: { [key: string]: number } = {};
+
+    if (menuItemIds.length > 0) {
+      const { data: ratingsData } = await supabase
+        .from("ratings")
+        .select("menu_item_id, rating")
+        .in("menu_item_id", menuItemIds);
+
+      if (ratingsData) {
+        // Calculate counts and averages
+        const ratingsGrouped = ratingsData.reduce((acc, rating) => {
+          if (!acc[rating.menu_item_id]) {
+            acc[rating.menu_item_id] = [];
+          }
+          acc[rating.menu_item_id].push(rating.rating);
+          return acc;
+        }, {} as { [key: string]: number[] });
+
+        Object.keys(ratingsGrouped).forEach((menuItemId) => {
+          const ratings = ratingsGrouped[menuItemId];
+          ratingCounts[menuItemId] = ratings.length;
+          ratingAverages[menuItemId] =
+            ratings.reduce((sum, r) => sum + r, 0) / ratings.length;
+        });
+      }
+    }
+
     // Map the data to match our AdminMenuItem interface
     const mappedData = (data || []).map((item: any) => ({
       ...item,
@@ -101,6 +131,8 @@ export const fetchMenuItems = async (
       subcategory: Array.isArray(item.subcategories)
         ? item.subcategories[0]
         : item.subcategories,
+      rating: ratingAverages[item.id] || 0, // Use calculated average from ratings table
+      rating_count: ratingCounts[item.id] || 0,
     }));
 
     return { data: mappedData as AdminMenuItem[] };
@@ -138,6 +170,21 @@ export const fetchMenuItemById = async (
       return { data: null, error: error.message };
     }
 
+    // Get rating count and average for this specific menu item
+    const { data: ratingsData } = await supabase
+      .from("ratings")
+      .select("rating")
+      .eq("menu_item_id", id);
+
+    let calculatedRating = 0;
+    let ratingCount = 0;
+
+    if (ratingsData && ratingsData.length > 0) {
+      ratingCount = ratingsData.length;
+      const totalRating = ratingsData.reduce((sum, r) => sum + r.rating, 0);
+      calculatedRating = totalRating / ratingCount;
+    }
+
     // Map the data to match our AdminMenuItem interface
     const mappedData = {
       ...data,
@@ -147,6 +194,8 @@ export const fetchMenuItemById = async (
       subcategory: Array.isArray(data.subcategories)
         ? data.subcategories[0]
         : data.subcategories,
+      rating: calculatedRating, // Use calculated average from ratings table
+      rating_count: ratingCount,
     };
 
     return { data: mappedData as AdminMenuItem };
@@ -187,6 +236,7 @@ export const createMenuItem = async (
       return { data: null, error: error.message };
     }
 
+    // New menu items start with 0 ratings
     // Map the data to match our AdminMenuItem interface
     const mappedData = {
       ...data,
@@ -196,6 +246,8 @@ export const createMenuItem = async (
       subcategory: Array.isArray(data.subcategories)
         ? data.subcategories[0]
         : data.subcategories,
+      rating: 0, // New items have no ratings
+      rating_count: 0, // New items have no ratings
     };
 
     return { data: mappedData as AdminMenuItem };
@@ -239,6 +291,22 @@ export const updateMenuItem = async (
       return { data: null, error: error.message };
     }
 
+    // Get rating count and calculate average rating
+    const { data: ratingsData } = await supabase
+      .from("ratings")
+      .select("rating")
+      .eq("menu_item_id", id);
+
+    const ratings = ratingsData || [];
+    const averageRating =
+      ratings.length > 0
+        ? parseFloat(
+            (
+              ratings.reduce((sum, r) => sum + r.rating, 0) / ratings.length
+            ).toFixed(1)
+          )
+        : 0;
+
     // Map the data to match our AdminMenuItem interface
     const mappedData = {
       ...data,
@@ -248,6 +316,8 @@ export const updateMenuItem = async (
       subcategory: Array.isArray(data.subcategories)
         ? data.subcategories[0]
         : data.subcategories,
+      rating: averageRating,
+      rating_count: ratings.length,
     };
 
     return { data: mappedData as AdminMenuItem };
@@ -277,14 +347,12 @@ export const deleteMenuItem = async (
       .eq("id", id)
       .single();
 
- 
-
     // Delete the menu item
     const { error: deleteError } = await supabase
       .from("menu_items")
       .delete()
       .eq("id", id);
-      
+
     if (deleteError) {
       return { success: false, error: deleteError.message };
     }
@@ -443,6 +511,7 @@ export const getMenuItemStats = async (
     availableItems: number;
     unavailableItems: number;
     averageRating: number;
+    totalRatings: number;
     totalViews: number;
     averagePrice: number;
   };
@@ -467,6 +536,7 @@ export const getMenuItemStats = async (
           availableItems: 0,
           unavailableItems: 0,
           averageRating: 0,
+          totalRatings: 0,
           totalViews: 0,
           averagePrice: 0,
         },
@@ -474,15 +544,53 @@ export const getMenuItemStats = async (
       };
     }
 
+    // Get actual ratings data for calculation
+    let averageRating = 0;
+    let totalRatings = 0;
+
+    if (restaurantId) {
+      // Get all ratings for menu items of this restaurant
+      const { data: menuItems } = await supabase
+        .from("menu_items")
+        .select("id")
+        .eq("restaurant_id", restaurantId);
+
+      if (menuItems && menuItems.length > 0) {
+        const menuItemIds = menuItems.map((item) => item.id);
+        const { data: allRatings } = await supabase
+          .from("ratings")
+          .select("rating")
+          .in("menu_item_id", menuItemIds);
+
+        if (allRatings && allRatings.length > 0) {
+          averageRating =
+            allRatings.reduce((sum, r) => sum + r.rating, 0) /
+            allRatings.length;
+        }
+        totalRatings = allRatings?.length || 0;
+      }
+    } else {
+      // Get all ratings for overall average
+      const { data: allRatings } = await supabase
+        .from("ratings")
+        .select("rating");
+
+      if (allRatings && allRatings.length > 0) {
+        averageRating =
+          allRatings.reduce((sum, r) => sum + r.rating, 0) / allRatings.length;
+      }
+      totalRatings = allRatings?.length || 0;
+    }
+
     const totalItems = data.length;
     const availableItems = data.filter((item) => item.is_available).length;
     const unavailableItems = totalItems - availableItems;
-    const averageRating =
-      data.reduce((sum, item) => sum + (item.rating || 0), 0) / totalItems || 0;
-    const totalViews = data.reduce((sum, item) => sum + (item.views_count || 0), 0);
+    const totalViews = data.reduce(
+      (sum, item) => sum + (item.views_count || 0),
+      0
+    );
     const averagePrice =
-      data.reduce((sum, item) => sum + (item.price || 0), 0) /
-        totalItems || 0;
+      data.reduce((sum, item) => sum + (item.price || 0), 0) / totalItems || 0;
 
     return {
       data: {
@@ -490,6 +598,7 @@ export const getMenuItemStats = async (
         availableItems,
         unavailableItems,
         averageRating: Math.round(averageRating * 100) / 100,
+        totalRatings: totalRatings,
         totalViews,
         averagePrice: Math.round(averagePrice * 100) / 100,
       },
@@ -501,6 +610,7 @@ export const getMenuItemStats = async (
         availableItems: 0,
         unavailableItems: 0,
         averageRating: 0,
+        totalRatings: 0,
         totalViews: 0,
         averagePrice: 0,
       },

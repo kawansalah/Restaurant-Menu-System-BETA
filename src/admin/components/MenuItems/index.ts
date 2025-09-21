@@ -9,3 +9,4 @@ export { default as MenuItemStatsCards } from "./MenuItemStatsCards";
 export * from "./MenuItemConstants";
 export * from "./MenuItemUtils";
 export * from "./MenuItemTableConfig";
+export * from "./RatingTableConfig";

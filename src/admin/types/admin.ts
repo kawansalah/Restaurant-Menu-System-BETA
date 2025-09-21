@@ -189,6 +189,7 @@ export interface AdminMenuItem {
   price: number; // Database stores as number
   image_url?: string;
   rating?: number;
+  rating_count?: number; // Count of ratings from ratings table
   is_available: boolean;
   views_count?: number;
   created_at: string;

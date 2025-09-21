@@ -46,6 +46,13 @@ export const getMenuItemTableColumns = (): MenuItemTableColumn[] => [
     key: "rating",
     label: "Rating",
     sortable: true,
+    width: "120px",
+    align: "center",
+  },
+  {
+    key: "total_ratings",
+    label: "Reviews",
+    sortable: true,
     width: "80px",
     align: "center",
   },
@@ -86,6 +93,7 @@ export interface MenuItemMobileCardConfig {
   showSubcategory: boolean;
   showDescription: boolean;
   showRating: boolean;
+  showTotalRatings: boolean;
   showViews: boolean;
   showCartAdditions: boolean;
   showCreatedDate: boolean;
@@ -98,6 +106,7 @@ export const defaultMobileCardConfig: MenuItemMobileCardConfig = {
   showSubcategory: true,
   showDescription: true,
   showRating: true,
+  showTotalRatings: true,
   showViews: true,
   showCartAdditions: true,
   showCreatedDate: true,
@@ -181,6 +190,17 @@ export interface MenuItemStatsConfig {
     label: string;
     icon: string;
   };
+  totalRatings: {
+    show: boolean;
+    label: string;
+    icon: string;
+  };
+  highlyRated: {
+    show: boolean;
+    label: string;
+    icon: string;
+    threshold: number; // Items with rating >= this value
+  };
   totalViews: {
     show: boolean;
     label: string;
@@ -213,6 +233,17 @@ export const defaultStatsConfig: MenuItemStatsConfig = {
     show: true,
     label: "Avg Rating",
     icon: "star",
+  },
+  totalRatings: {
+    show: true,
+    label: "Total Reviews",
+    icon: "message-square",
+  },
+  highlyRated: {
+    show: true,
+    label: "Highly Rated",
+    icon: "star-half",
+    threshold: 4.0,
   },
   totalViews: {
     show: true,
@@ -294,5 +325,32 @@ export const defaultFormFieldConfig: MenuItemFormFieldConfig = {
   },
   availability: {
     defaultValue: true,
+  },
+};
+
+// Rating management configuration
+export interface RatingManagementConfig {
+  showRatingDetails: boolean;
+  showRatingHistory: boolean;
+  allowRatingModeration: boolean;
+  showRatingDistribution: boolean;
+  enableRatingExport: boolean;
+  ratingFilters: {
+    byRating: boolean;
+    byDateRange: boolean;
+    byUserAgent: boolean;
+  };
+}
+
+export const defaultRatingConfig: RatingManagementConfig = {
+  showRatingDetails: true,
+  showRatingHistory: true,
+  allowRatingModeration: true,
+  showRatingDistribution: true,
+  enableRatingExport: true,
+  ratingFilters: {
+    byRating: true,
+    byDateRange: true,
+    byUserAgent: true,
   },
 };

@@ -98,7 +98,9 @@ const MenuItemMobileCard: React.FC<MenuItemMobileCardProps> = ({
     };
 
     return (
-      texts[key as keyof typeof texts]?.[language as keyof (typeof texts)[keyof typeof texts]] ||
+      texts[key as keyof typeof texts]?.[
+        language as keyof (typeof texts)[keyof typeof texts]
+      ] ||
       texts[key as keyof typeof texts]?.en ||
       key
     );
@@ -122,7 +124,7 @@ const MenuItemMobileCard: React.FC<MenuItemMobileCardProps> = ({
     if ((e.target as HTMLElement).closest(".action-button")) {
       return;
     }
-    
+
     setIsLongPress(false);
     const timer = setTimeout(() => {
       setIsLongPress(true);
@@ -143,7 +145,7 @@ const MenuItemMobileCard: React.FC<MenuItemMobileCardProps> = ({
     if ((e.target as HTMLElement).closest(".action-button")) {
       return;
     }
-    
+
     // Only show modal if it wasn't a long press
     if (!isLongPress) {
       // Show modal - for now we'll use the edit function as the modal
@@ -162,7 +164,11 @@ const MenuItemMobileCard: React.FC<MenuItemMobileCardProps> = ({
     <div
       className={`${
         theme.isDark ? theme.bgPrimary : theme.bgCard
-      } relative rounded-[25px] ${theme.topbarShadowStyle} w-full cursor-pointer mb-3 border ${theme.borderSubCategory} p-4 min-h-[140px] transition-all duration-200
+      } relative rounded-[25px] ${
+        theme.topbarShadowStyle
+      } w-full cursor-pointer mb-3 border ${
+        theme.borderSubCategory
+      } p-4 min-h-[140px] transition-all duration-200
         ${isSelected ? "ring-2 ring-[var(--bg-main)] ring-opacity-50" : ""}
       `}
       onTouchStart={handleTouchStart}
@@ -179,7 +185,7 @@ const MenuItemMobileCard: React.FC<MenuItemMobileCardProps> = ({
             onChange={() => onSelect(menuItem)}
             className="w-4 h-4 text-[var(--bg-main)] border-gray-300 rounded focus:ring-[var(--bg-main)]"
           />
-          
+
           {/* Menu Item ID Badge */}
           <div
             className={`inline-flex items-center justify-center h-6 px-2 py-1 rounded-full ${theme.bgSecondary}`}
@@ -237,9 +243,9 @@ const MenuItemMobileCard: React.FC<MenuItemMobileCardProps> = ({
                 className={`
                   w-full px-3 py-2 text-sm text-left flex items-center gap-2
                   transition-colors
-                  ${
-                    theme.isDark ? theme.textSecondary : theme.textPrimary
-                  } ${theme.itemHover}
+                  ${theme.isDark ? theme.textSecondary : theme.textPrimary} ${
+                  theme.itemHover
+                }
                 `}
               >
                 <Edit className="h-3 w-3" />
@@ -252,22 +258,24 @@ const MenuItemMobileCard: React.FC<MenuItemMobileCardProps> = ({
                 className={`
                   w-full px-3 py-2 text-sm text-left flex items-center gap-2
                   transition-colors
-                  ${
-                    theme.isDark ? theme.textSecondary : theme.textPrimary
-                  } ${theme.itemHover}
+                  ${theme.isDark ? theme.textSecondary : theme.textPrimary} ${
+                  theme.itemHover
+                }
                 `}
               >
                 <Package className="h-3 w-3" />
-                {menuItem.is_available ? getText("makeUnavailable") : getText("makeAvailable")}
+                {menuItem.is_available
+                  ? getText("makeUnavailable")
+                  : getText("makeAvailable")}
               </button>
               <button
                 onClick={(e) => handleActionClick(e, () => onDelete(menuItem))}
                 className={`
                   w-full px-3 py-2 text-sm text-left flex items-center gap-2
                   transition-colors
-                  ${
-                    theme.isDark ? theme.textSecondary : theme.textPrimary
-                  } ${theme.itemHover}
+                  ${theme.isDark ? theme.textSecondary : theme.textPrimary} ${
+                  theme.itemHover
+                }
                   text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20
                 `}
               >
@@ -279,12 +287,12 @@ const MenuItemMobileCard: React.FC<MenuItemMobileCardProps> = ({
         </div>
       </div>
 
-
-
       {/* Main content */}
       <div className="mb-3">
         <h3
-          className={`font-semibold ${theme.isDark? theme.textSecondary : theme.textPrimary} text-sm leading-tight mb-1`}
+          className={`font-semibold ${
+            theme.isDark ? theme.textSecondary : theme.textPrimary
+          } text-sm leading-tight mb-1`}
         >
           {name}
         </h3>
@@ -328,7 +336,7 @@ const MenuItemMobileCard: React.FC<MenuItemMobileCardProps> = ({
           </div>
 
           {/* Rating */}
-          <div className="flex items-center gap-1">
+          <div className="flex items-center gap-2">
             {menuItem.rating && menuItem.rating > 0 ? (
               <div
                 className={`
@@ -345,6 +353,10 @@ const MenuItemMobileCard: React.FC<MenuItemMobileCardProps> = ({
                 No rating
               </span>
             )}
+            {/* Rating Count */}
+            <span className={`text-xs ${theme.textSecondary}`}>
+              ({menuItem.rating_count || 0})
+            </span>
           </div>
         </div>
 
@@ -357,7 +369,7 @@ const MenuItemMobileCard: React.FC<MenuItemMobileCardProps> = ({
           >
             {availabilityText}
           </div>
-          
+
           <div className="flex items-center gap-3">
             <span className="flex items-center gap-1 text-xs text-gray-500">
               <Eye className="h-3 w-3" />
