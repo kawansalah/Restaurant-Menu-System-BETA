@@ -190,6 +190,16 @@ export const SUBCATEGORY_TEXTS = {
     ar: "تحميل المزيد من الفئات الفرعية",
     en: "Load More SubCategories",
   },
+  seeMore: {
+    ku: "زیاتر ببینە",
+    ar: "عرض المزيد",
+    en: "See More",
+  },
+  more: {
+    ku: "زیاتر",
+    ar: "المزيد",
+    en: "more",
+  },
   showing: {
     ku: "نیشاندان",
     ar: "عرض",

@@ -45,6 +45,10 @@ const PaginatedSubCategoryList: React.FC<PaginatedSubCategoryListProps> = ({
   const [error, setError] = useState<string | null>(null);
   const [hasNextPage, setHasNextPage] = useState(true);
 
+  // Initial display limit state
+  const [showAllItems, setShowAllItems] = useState(false);
+  const INITIAL_DISPLAY_LIMIT = 10;
+
   const PAGE_SIZE = 10;
 
   // Utility function to apply sorting
@@ -105,6 +109,7 @@ const PaginatedSubCategoryList: React.FC<PaginatedSubCategoryListProps> = ({
       setLoading(true);
       setError(null);
       setCurrentPage(1);
+      setShowAllItems(false); // Reset to show limited items when data refreshes
 
       // Fetch all subcategories without backend search filter (client-side filtering instead)
       const { data, error: fetchError } = await fetchSubCategories();
@@ -628,15 +633,24 @@ const PaginatedSubCategoryList: React.FC<PaginatedSubCategoryListProps> = ({
           <div
             className={`px-3 py-1 rounded-full text-xs font-medium ${theme.bgSecondary} ${theme.textSecondary}`}
           >
-            {getText("showing")} {subcategories.length}
-            {totalSubCategories > subcategories.length &&
+            {getText("showing")}{" "}
+            {showAllItems
+              ? subcategories.length
+              : Math.min(subcategories.length, INITIAL_DISPLAY_LIMIT)}
+            {totalSubCategories >
+              (showAllItems
+                ? subcategories.length
+                : Math.min(subcategories.length, INITIAL_DISPLAY_LIMIT)) &&
               ` ${getText("of")} ${totalSubCategories}`}
           </div>
         </div>
 
         {/* SubCategories List */}
         <div className="space-y-3">
-          {subcategories.map((subcategory, index) => (
+          {(showAllItems
+            ? subcategories
+            : subcategories.slice(0, INITIAL_DISPLAY_LIMIT)
+          ).map((subcategory, index) => (
             <div
               key={subcategory.id}
               data-subcategory-index={index}
@@ -656,18 +670,64 @@ const PaginatedSubCategoryList: React.FC<PaginatedSubCategoryListProps> = ({
           ))}
         </div>
 
-        {/* Load More Button */}
-        {hasNextPage && !loading && <LoadMoreButton />}
+        {/* See More Button - Show if there are more than INITIAL_DISPLAY_LIMIT items and not showing all */}
+        {!showAllItems &&
+          subcategories.length > INITIAL_DISPLAY_LIMIT &&
+          !loading && (
+            <div className="flex justify-center py-6">
+              <button
+                onClick={() => setShowAllItems(true)}
+                className={`
+                group flex items-center gap-3 px-8 py-4 rounded-2xl font-medium text-sm
+                transition-all duration-300 transform hover:scale-105 active:scale-95
+                ${theme.bgMain} ${theme.buttonTextPrimary} shadow-lg hover:shadow-xl
+                ${theme.borderMain} border backdrop-blur-sm
+                relative overflow-hidden
+              `}
+                style={{
+                  boxShadow: theme.isDark
+                    ? "0 4px 12px rgba(253, 187, 42, 0.3)"
+                    : "0 4px 12px rgba(253, 187, 42, 0.2)",
+                }}
+              >
+                {/* Background shimmer effect */}
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent transform -skew-x-12 group-hover:animate-shimmer"></div>
+
+                <svg
+                  className="w-5 h-5 transition-transform group-hover:rotate-90"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2.5}
+                    d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+                  />
+                </svg>
+                <span className="font-semibold">
+                  {getText("seeMore")} (
+                  {subcategories.length - INITIAL_DISPLAY_LIMIT}{" "}
+                  {getText("more")})
+                </span>
+                <div className="ml-1 w-1.5 h-1.5 bg-white/70 rounded-full animate-ping"></div>
+              </button>
+            </div>
+          )}
+
+        {/* Load More Button - Show only when showing all items and there are more pages */}
+        {showAllItems && hasNextPage && !loading && <LoadMoreButton />}
 
         {/* Loading More Indicator */}
-        {loadingMore && (
+        {showAllItems && loadingMore && (
           <div className="mt-4">
             <LoaderComponent />
           </div>
         )}
 
         {/* End of list indicator */}
-        {!hasNextPage && subcategories.length > PAGE_SIZE && (
+        {showAllItems && !hasNextPage && subcategories.length > PAGE_SIZE && (
           <div className="text-center py-4">
             <div
               className={`inline-flex items-center gap-2 px-4 py-2 rounded-full ${theme.bgSecondary} ${theme.textSecondary} text-sm`}

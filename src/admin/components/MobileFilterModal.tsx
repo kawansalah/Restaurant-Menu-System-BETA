@@ -39,6 +39,9 @@ export interface MobileFilterModalProps<T = any> {
   showColumnVisibility?: boolean;
   onClearAll?: () => void;
   onApply?: () => void;
+  // Additional props for menu items filtering
+  categories?: Array<{ id: string; label_en: string }>;
+  subcategories?: Array<{ id: string; label_en: string; category_id: string }>;
 }
 
 // Custom Checkbox Component
@@ -108,6 +111,8 @@ const MobileFilterModal = <T extends Record<string, any>>({
   showColumnVisibility = true,
   onClearAll,
   onApply,
+  categories = [],
+  subcategories = [],
 }: MobileFilterModalProps<T>) => {
   const theme = useThemeClasses();
   const { language, isRTL } = useLanguage();
@@ -366,10 +371,10 @@ const MobileFilterModal = <T extends Record<string, any>>({
           {activeTab === "search" && searchable && (
             <div className="space-y-4 animate-in fade-in-0 slide-in-from-right-2 duration-300">
               <Input
-                type="search"
+                type="text"
                 placeholder={texts.searchPlaceholder[language]}
                 value={searchQuery}
-                onChange={(value) => onSearchChange(value as string)}
+                onChange={(value) => onSearchChange(String(value))}
                 icon={<Search className="w-4 h-4" />}
                 iconPosition="left"
               />
@@ -396,6 +401,67 @@ const MobileFilterModal = <T extends Record<string, any>>({
                             { value: "true", label: "Active" },
                             { value: "false", label: "Inactive" },
                           ]}
+                        />
+                      );
+
+                    case "is_available":
+                      return (
+                        <Input
+                          type="dropdown"
+                          value={columnFilters[column.key] || ""}
+                          onSelect={(value) =>
+                            handleColumnFilterChange(column.key, value)
+                          }
+                          placeholder="All Status"
+                          options={[
+                            { value: "", label: "All Status" },
+                            { value: "true", label: "Available" },
+                            { value: "false", label: "Unavailable" },
+                          ]}
+                        />
+                      );
+
+                    case "category_id":
+                      return (
+                        <Input
+                          type="dropdown"
+                          value={columnFilters[column.key] || ""}
+                          onSelect={(value) =>
+                            handleColumnFilterChange(column.key, value)
+                          }
+                          placeholder="All Categories"
+                          options={[
+                            { value: "", label: "All Categories" },
+                            ...categories.map((cat) => ({
+                              value: cat.id,
+                              label: cat.label_en,
+                            })),
+                          ]}
+                        />
+                      );
+
+                    case "subcategory_id":
+                      const filteredSubcategories = subcategories.filter(
+                        (sub) =>
+                          !columnFilters.category_id ||
+                          sub.category_id === columnFilters.category_id
+                      );
+                      return (
+                        <Input
+                          type="dropdown"
+                          value={columnFilters[column.key] || ""}
+                          onSelect={(value) =>
+                            handleColumnFilterChange(column.key, value)
+                          }
+                          placeholder="All Subcategories"
+                          options={[
+                            { value: "", label: "All Subcategories" },
+                            ...filteredSubcategories.map((sub) => ({
+                              value: sub.id,
+                              label: sub.label_en,
+                            })),
+                          ]}
+                          disabled={!columnFilters.category_id}
                         />
                       );
 
@@ -571,7 +637,9 @@ const MobileFilterModal = <T extends Record<string, any>>({
                   ${
                     !sortConfig
                       ? `${theme.bgMain} ${theme.buttonTextPrimary} shadow-lg`
-                      : `${theme.bgSecondary} ${theme.isDark ? theme.textSecondary : theme.textPrimary} hover:${theme.bgSearchBar} hover:shadow-md`
+                      : `${theme.bgSecondary} ${
+                          theme.isDark ? theme.textSecondary : theme.textPrimary
+                        } hover:${theme.bgSearchBar} hover:shadow-md`
                   }
                 `}
               >
@@ -604,7 +672,11 @@ const MobileFilterModal = <T extends Record<string, any>>({
                         sortConfig?.key === column.key &&
                         sortConfig.direction === "asc"
                           ? `${theme.bgMain} ${theme.buttonTextPrimary} shadow-lg`
-                          : `${theme.bgSecondary} ${theme.isDark ? theme.textSecondary : theme.textPrimary} hover:${theme.bgSearchBar} hover:shadow-md`
+                          : `${theme.bgSecondary} ${
+                              theme.isDark
+                                ? theme.textSecondary
+                                : theme.textPrimary
+                            } hover:${theme.bgSearchBar} hover:shadow-md`
                       }
                     `}
                   >
@@ -624,7 +696,11 @@ const MobileFilterModal = <T extends Record<string, any>>({
                         sortConfig?.key === column.key &&
                         sortConfig.direction === "desc"
                           ? `${theme.bgMain} ${theme.buttonTextPrimary} shadow-lg`
-                          : `${theme.bgSecondary} ${theme.isDark ? theme.textSecondary : theme.textPrimary} hover:${theme.bgSearchBar} hover:shadow-md`
+                          : `${theme.bgSecondary} ${
+                              theme.isDark
+                                ? theme.textSecondary
+                                : theme.textPrimary
+                            } hover:${theme.bgSearchBar} hover:shadow-md`
                       }
                     `}
                   >

@@ -104,6 +104,10 @@ const PaginatedMenuItemList: React.FC<PaginatedMenuItemListProps> = ({
   // Selection states
   const [selectedItems, setSelectedItems] = useState<AdminMenuItem[]>([]);
 
+  // Initial display limit state
+  const [showAllItems, setShowAllItems] = useState(false);
+  const INITIAL_DISPLAY_LIMIT = 10;
+
   // Modal states
   const [showFormModal, setShowFormModal] = useState(false);
   const [editingMenuItem, setEditingMenuItem] = useState<AdminMenuItem | null>(
@@ -113,6 +117,11 @@ const PaginatedMenuItemList: React.FC<PaginatedMenuItemListProps> = ({
 
   const getText = (key: string) => {
     const texts = {
+      search: {
+        ku: "گەڕان",
+        ar: "بحث",
+        en: "Search",
+      },
       addFirstMenuItem: {
         ku: "خواردنێک زیادبکە",
         ar: "إضافة عنصر جديد",
@@ -208,6 +217,16 @@ const PaginatedMenuItemList: React.FC<PaginatedMenuItemListProps> = ({
         ku: "خواردنەکان",
         ar: "القائمة",
       },
+      seeMore: {
+        ku: "زیاتر ببینە",
+        ar: "عرض المزيد",
+        en: "See More",
+      },
+      more: {
+        ku: "زیاتر",
+        ar: "المزيد",
+        en: "more",
+      },
     };
 
     return (
@@ -229,11 +248,13 @@ const PaginatedMenuItemList: React.FC<PaginatedMenuItemListProps> = ({
   // Reload when filters change
   useEffect(() => {
     setCurrentPage(1);
+    setShowAllItems(false); // Reset to show limited items when filters change
     loadMenuItems();
   }, [filters]);
 
   // Reload when pagination changes
   useEffect(() => {
+    setShowAllItems(false); // Reset to show limited items when pagination changes
     loadMenuItems();
   }, [currentPage, itemsPerPage]);
 
@@ -313,6 +334,7 @@ const PaginatedMenuItemList: React.FC<PaginatedMenuItemListProps> = ({
       category_id: "",
       subcategory_id: "",
       is_available: undefined,
+      restaurant_id: user?.restaurant_id || "",
       sort_by: "created_at",
       sort_direction: "desc",
     });
@@ -484,6 +506,28 @@ const PaginatedMenuItemList: React.FC<PaginatedMenuItemListProps> = ({
       ),
     },
     {
+      key: "category_id",
+      title: config.category[language],
+      sortable: true,
+      filterable: true,
+      render: (_value: any, item: AdminMenuItem) => (
+        <span className={theme.textSecondary}>
+          {item.category?.label_en || "No Category"}
+        </span>
+      ),
+    },
+    {
+      key: "subcategory_id",
+      title: config.subcategory[language],
+      sortable: true,
+      filterable: true,
+      render: (_value: any, item: AdminMenuItem) => (
+        <span className={theme.textSecondary}>
+          {item.subcategory?.label_en || "No Subcategory"}
+        </span>
+      ),
+    },
+    {
       key: "price",
       title: config.price[language],
       sortable: true,
@@ -565,10 +609,10 @@ const PaginatedMenuItemList: React.FC<PaginatedMenuItemListProps> = ({
       ),
     },
     {
-      key: "status",
+      key: "is_available",
       title: config.status[language],
       sortable: true,
-      filterable: false,
+      filterable: true,
       align: "center" as const,
       render: (_value: any, item: AdminMenuItem) => {
         const STATUS_COLORS = {
@@ -702,6 +746,19 @@ const PaginatedMenuItemList: React.FC<PaginatedMenuItemListProps> = ({
       >
         {/* Filter Controls */}
         <div className="flex flex-col items-start justify-center">
+          {/* Search Input */}
+          <div className="w-full mb-4">
+            <Input
+              type="text"
+              value={filters.search || ""}
+              onChange={(value) => handleFilterChange("search", value)}
+              placeholder={`${getText("search")} ${getText(
+                "menuItems"
+              ).toLowerCase()}...`}
+              className="w-full"
+            />
+          </div>
+
           {/* Desktop Filters - Grid Layout */}
           <div className="grid grid-cols-1 xl:grid-cols-5 lg:grid-cols-3 gap-4">
             {/* Category Filter */}
@@ -806,9 +863,15 @@ const PaginatedMenuItemList: React.FC<PaginatedMenuItemListProps> = ({
             <div
               className={`px-3 py-1 rounded-full text-xs font-medium ${theme.bgSecondary} ${theme.textSecondary}`}
             >
-              {getText("showing")} {paginatedItems.length}
-              {totalItems > paginatedItems.length &&
-                ` ${getText("to")} ${totalItems}`}
+              {getText("showing")}{" "}
+              {showAllItems
+                ? paginatedItems.length
+                : Math.min(paginatedItems.length, INITIAL_DISPLAY_LIMIT)}
+              {totalItems >
+                (showAllItems
+                  ? paginatedItems.length
+                  : Math.min(paginatedItems.length, INITIAL_DISPLAY_LIMIT)) &&
+                ` ${getText("of")} ${totalItems}`}
             </div>
           </div>
 
@@ -881,7 +944,10 @@ const PaginatedMenuItemList: React.FC<PaginatedMenuItemListProps> = ({
           ) : (
             // Menu Items List
             <div className="space-y-3">
-              {paginatedItems.map((item, index) => (
+              {(showAllItems
+                ? paginatedItems
+                : paginatedItems.slice(0, INITIAL_DISPLAY_LIMIT)
+              ).map((item, index) => (
                 <div
                   key={item.id}
                   data-menuitem-index={index}
@@ -905,6 +971,52 @@ const PaginatedMenuItemList: React.FC<PaginatedMenuItemListProps> = ({
               ))}
             </div>
           )}
+
+          {/* See More Button - Show if there are more than INITIAL_DISPLAY_LIMIT items and not showing all */}
+          {!showAllItems &&
+            paginatedItems.length > INITIAL_DISPLAY_LIMIT &&
+            !loading && (
+              <div className="flex justify-center py-6">
+                <button
+                  onClick={() => setShowAllItems(true)}
+                  className={`
+                  group flex items-center gap-3 px-8 py-4 rounded-2xl font-medium text-sm
+                  transition-all duration-300 transform hover:scale-105 active:scale-95
+                  ${theme.bgMain} ${theme.buttonTextPrimary} shadow-lg hover:shadow-xl
+                  ${theme.borderMain} border backdrop-blur-sm
+                  relative overflow-hidden
+                `}
+                  style={{
+                    boxShadow: theme.isDark
+                      ? "0 4px 12px rgba(253, 187, 42, 0.3)"
+                      : "0 4px 12px rgba(253, 187, 42, 0.2)",
+                  }}
+                >
+                  {/* Background shimmer effect */}
+                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent transform -skew-x-12 group-hover:animate-shimmer"></div>
+
+                  <svg
+                    className="w-5 h-5 transition-transform group-hover:rotate-90"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2.5}
+                      d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+                    />
+                  </svg>
+                  <span className="font-semibold">
+                    {getText("seeMore")} (
+                    {paginatedItems.length - INITIAL_DISPLAY_LIMIT}{" "}
+                    {getText("more")})
+                  </span>
+                  <div className="ml-1 w-1.5 h-1.5 bg-white/70 rounded-full animate-ping"></div>
+                </button>
+              </div>
+            )}
         </div>
       ) : (
         // Desktop Table
@@ -918,6 +1030,7 @@ const PaginatedMenuItemList: React.FC<PaginatedMenuItemListProps> = ({
           onAdd={handleAddMenuItem}
           onRefresh={handleRefresh}
           className="animate-fade-in"
+          searchable={false}
         />
       )}
 
@@ -1006,23 +1119,85 @@ const PaginatedMenuItemList: React.FC<PaginatedMenuItemListProps> = ({
       {/* Mobile Filter Modal */}
       {isMobile && (
         <MobileFilterModal
+          // Modal Control
           isOpen={showMobileFilters}
           onClose={() => setShowMobileFilters(false)}
+          // Core Configuration
           columns={columns}
+          searchable={true}
+          filterable={true}
+          sortable={true}
+          showColumnVisibility={true}
+          // Search Configuration
           searchQuery={filters.search || ""}
           onSearchChange={(query) =>
             setFilters((prev) => ({ ...prev, search: query }))
           }
-          columnFilters={{}}
-          onColumnFiltersChange={() => {}}
-          columnVisibility={{}}
-          onColumnVisibilityChange={() => {}}
-          sortConfig={null}
-          onSortChange={() => {}}
+          // Filter Configuration - Fixed column keys to match table columns
+          columnFilters={{
+            category_id: filters.category_id || "",
+            subcategory_id: filters.subcategory_id || "",
+            is_available: filters.is_available?.toString() || "",
+          }}
+          onColumnFiltersChange={(newFilters) => {
+            setFilters((prev) => ({
+              ...prev,
+              category_id: newFilters.category_id || "",
+              subcategory_id: newFilters.subcategory_id || "",
+              is_available: newFilters.is_available
+                ? newFilters.is_available === "true"
+                : undefined,
+            }));
+          }}
+          // Column Visibility Configuration - Fixed to match actual column keys
+          columnVisibility={{
+            image: false,
+            name: false,
+            category_id: true,
+            subcategory_id: true,
+            price: false,
+            rating: true,
+            rating_count: true,
+            is_available: true,
+            views: true,
+            actions: true,
+          }}
+          onColumnVisibilityChange={(visibility) => {
+            // Handle column visibility changes if needed
+            console.log("Column visibility changed:", visibility);
+          }}
+          // Sort Configuration
+          sortConfig={
+            filters.sort_by
+              ? {
+                  key: filters.sort_by,
+                  direction: filters.sort_direction as "asc" | "desc",
+                }
+              : null
+          }
+          onSortChange={(config) => {
+            if (config) {
+              setFilters((prev) => ({
+                ...prev,
+                sort_by: config.key,
+                sort_direction: config.direction,
+              }));
+            } else {
+              setFilters((prev) => ({
+                ...prev,
+                sort_by: "created_at",
+                sort_direction: "desc",
+              }));
+            }
+          }}
+          // Action Handlers
           onClearAll={handleClearFilters}
           onApply={() => {
             setShowMobileFilters(false);
           }}
+          // Menu Item Specific Data
+          categories={categories}
+          subcategories={subcategories}
         />
       )}
 
@@ -1062,6 +1237,41 @@ const PaginatedMenuItemList: React.FC<PaginatedMenuItemListProps> = ({
         onSubmit={handleFormSubmit}
         isSubmitting={submitting}
       />
+
+      <style>{`
+        @keyframes fade-in {
+          from {
+            opacity: 0;
+            transform: translateY(10px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+
+        @keyframes shimmer {
+          0% {
+            transform: translateX(-100%) skewX(-12deg);
+          }
+          100% {
+            transform: translateX(200%) skewX(-12deg);
+          }
+        }
+
+        .animate-fade-in {
+          animation: fade-in 0.4s ease-out forwards;
+          opacity: 0;
+        }
+
+        .animate-shimmer {
+          animation: shimmer 1.5s infinite;
+        }
+
+        .group:hover .animate-shimmer {
+          animation-duration: 0.6s;
+        }
+      `}</style>
     </div>
   );
 };

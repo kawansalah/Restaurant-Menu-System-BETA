@@ -42,14 +42,9 @@ export const fetchMenuItems = async (
 
     // Apply search filter
     if (filters?.search) {
-      query = query.or(`
-        name_ku.ilike.%${filters.search}%,
-        name_ar.ilike.%${filters.search}%,
-        name_en.ilike.%${filters.search}%,
-        description_ku.ilike.%${filters.search}%,
-        description_ar.ilike.%${filters.search}%,
-        description_en.ilike.%${filters.search}%
-      `);
+      query = query.or(
+        `name_ku.ilike.%${filters.search}%,name_ar.ilike.%${filters.search}%,name_en.ilike.%${filters.search}%,description_ku.ilike.%${filters.search}%,description_ar.ilike.%${filters.search}%,description_en.ilike.%${filters.search}%`
+      );
     }
 
     // Apply category filter
