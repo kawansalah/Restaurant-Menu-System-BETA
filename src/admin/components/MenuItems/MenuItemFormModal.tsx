@@ -171,9 +171,9 @@ const MenuItemFormModal: React.FC<MenuItemFormModalProps> = ({
 
   // Handle escape key press
   useEffect(() => {
-    const handleEscapeKey = (event: KeyboardEvent) => {
+    const handleEscapeKey = async (event: KeyboardEvent) => {
       if (event.key === "Escape" && isOpen && !isSubmitting && !uploading) {
-        handleCancel();
+        await handleCancel();
       }
     };
 
@@ -186,12 +186,14 @@ const MenuItemFormModal: React.FC<MenuItemFormModalProps> = ({
       document.removeEventListener("keydown", handleEscapeKey);
       document.body.style.overflow = "unset";
     };
-  }, [isOpen, isSubmitting, uploading]);
+  }, [isOpen, isSubmitting, uploading, formData]); // Added formData dependency
 
   // Handle click outside modal
-  const handleBackdropClick = (event: React.MouseEvent<HTMLDivElement>) => {
+  const handleBackdropClick = async (
+    event: React.MouseEvent<HTMLDivElement>
+  ) => {
     if (event.target === event.currentTarget && !isSubmitting && !uploading) {
-      handleCancel();
+      await handleCancel();
     }
   };
 
@@ -373,7 +375,52 @@ const MenuItemFormModal: React.FC<MenuItemFormModalProps> = ({
     }
   };
 
-  const handleCancel = () => {
+  // Helper function to check if form has any filled data
+  const hasFormData = (): boolean => {
+    const defaultValues = {
+      category_id: "",
+      subcategory_id: "",
+      name_ku: "",
+      name_ar: "",
+      name_en: "",
+      description_ku: "",
+      description_ar: "",
+      description_en: "",
+      price: "",
+      image_url: "",
+    };
+
+    // Check if any field has been modified from default values
+    return (
+      formData.category_id !== defaultValues.category_id ||
+      formData.subcategory_id !== defaultValues.subcategory_id ||
+      formData.name_ku.trim() !== defaultValues.name_ku ||
+      formData.name_ar.trim() !== defaultValues.name_ar ||
+      formData.name_en.trim() !== defaultValues.name_en ||
+      formData.description_ku?.trim() !== defaultValues.description_ku ||
+      formData.description_ar?.trim() !== defaultValues.description_ar ||
+      formData.description_en?.trim() !== defaultValues.description_en ||
+      formData.price.trim() !== defaultValues.price ||
+      formData.image_url !== defaultValues.image_url
+    );
+  };
+
+  const handleCancel = async () => {
+    // Check if form has any data filled
+    if (hasFormData()) {
+      const confirmed = await alerts.confirm(
+        getText("unsavedChangesMessage"),
+        getText("unsavedChangesTitle"),
+        getText("closeAnyway"),
+        getText("continueEditing")
+      );
+
+      if (!confirmed) {
+        return; // User chose to continue editing
+      }
+    }
+
+    // Reset form and close modal
     setFormData({
       restaurant_id: user?.restaurant_id || "",
       category_id: "",

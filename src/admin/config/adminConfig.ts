@@ -300,6 +300,11 @@ export interface AdminConfig {
       availableMenuItems: LocalizedText;
       showing: LocalizedText;
       of: LocalizedText;
+      // Unsaved changes confirmation
+      unsavedChangesMessage: LocalizedText;
+      unsavedChangesTitle: LocalizedText;
+      closeAnyway: LocalizedText;
+      continueEditing: LocalizedText;
     };
     restaurants: {
       title: LocalizedText;
@@ -1673,6 +1678,27 @@ export const defaultAdminConfig: AdminConfig = {
         ku: "لە",
         ar: "من",
         en: "of",
+      },
+      // Unsaved changes confirmation
+      unsavedChangesMessage: {
+        ku: "گۆڕانکارییەکانت پاشەکەوت نەکراون. دڵنیایت لە داخستن بەبێ پاشەکەوتکردن؟",
+        ar: "لديك تغييرات غير محفوظة. هل أنت متأكد من الإغلاق بدون حفظ؟",
+        en: "You have unsaved changes. Are you sure you want to close without saving?",
+      },
+      unsavedChangesTitle: {
+        ku: "گۆڕانکارییەکان پاشەکەوت نەکراون",
+        ar: "تغييرات غير محفوظة",
+        en: "Unsaved Changes",
+      },
+      closeAnyway: {
+        ku: "داخستن",
+        ar: "إغلاق",
+        en: "Close anyway",
+      },
+      continueEditing: {
+        ku: "بەردەوامبوون",
+        ar: "متابعة",
+        en: "Continue",
       },
     },
     restaurants: {
