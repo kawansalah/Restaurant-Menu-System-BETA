@@ -72,6 +72,8 @@ export const useThemeClasses = () => {
     main:"#B6934B",
     shadow:"#A27F37",
 
+    
+
     // Current theme
     theme,
     isDark: theme === "dark",

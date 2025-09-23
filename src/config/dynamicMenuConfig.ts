@@ -15,7 +15,7 @@ import {
 import { MenuConfig, Category, SubCategory, MenuItem } from "@/types/menu";
 import mymenudark from "@/assets/logo/My Menu Dark.svg";
 import mymenulight from "@/assets/logo/MyMenu.svg";
-import defaultFoodImage from "@/assets/images/foods/Frame 46.png";
+import defaultFoodImage from "@/assets/images/foods/default.jpg";
 import feedback from "@/assets/icons/feedback.png";
 
 // Category-specific "All" subcategory icons - React components from Icons.tsx
