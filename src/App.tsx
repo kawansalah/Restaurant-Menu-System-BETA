@@ -5,6 +5,7 @@ import {
   useParams,
 } from "react-router-dom";
 import { useState, useEffect } from "react";
+import { Analytics } from "@vercel/analytics/react";
 import { ThemeProvider } from "@/contexts/ThemeContext";
 import { LanguageProvider } from "@/contexts/LanguageContext";
 import { CartProvider } from "@/contexts/CartContext";
@@ -43,11 +44,11 @@ function App() {
 
   useEffect(() => {
     const loadConfiguration = async () => {
-      console.log("App useEffect: Starting to load configuration");
+      // console.log("App useEffect: Starting to load configuration");
 
       try {
         const config = await getMenuConfig();
-        console.log("App useEffect: Menu config loaded:", config);
+        // console.log("App useEffect: Menu config loaded:", config);
         setMenuConfig(config);
       } catch (error) {
         console.error("App useEffect: Error loading configuration:", error);
@@ -76,6 +77,7 @@ function App() {
         <CartProvider>
           <AlertProvider>
             <RestaurantProvider>
+              <Analytics />
               {isInitialLoading && (
                 <Loader
                   onLoadComplete={handleInitialLoadComplete}

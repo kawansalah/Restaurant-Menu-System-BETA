@@ -33,20 +33,20 @@ export const RestaurantProvider: React.FC<RestaurantProviderProps> = ({
     setError(null);
 
     try {
-      console.log("Loading restaurant with slug:", slug);
+      // console.log("Loading restaurant with slug:", slug);
 
       // Get restaurant data
       const restaurantData = await getRestaurantBySlug(slug);
       if (!restaurantData) {
-        throw new Error(`Restaurant not found with slug: ${slug}`);
+        // throw new Error(`Restaurant not found with slug: ${slug}`);
       }
 
-      console.log("Restaurant loaded:", restaurantData);
+      // console.log("Restaurant loaded:", restaurantData);
       setRestaurant(restaurantData);
 
       // Get dynamic menu configuration
       const config = await getMenuConfig(slug);
-      console.log("Menu config loaded");
+      // console.log("Menu config loaded");
       setMenuConfig(config);
     } catch (err) {
       console.error("Error loading restaurant:", err);

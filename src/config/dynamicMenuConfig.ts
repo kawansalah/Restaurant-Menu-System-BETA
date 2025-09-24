@@ -646,18 +646,18 @@ export const getMenuConfig = async (
   try {
     // If no restaurant slug provided, return default config
     if (!restaurantSlug) {
-      console.log("No restaurant slug provided, returning default config");
+      // console.log("No restaurant slug provided, returning default config");
       return defaultMenuConfig;
     }
 
     // Get restaurant data by slug
     const restaurant = await getRestaurantBySlug(restaurantSlug);
     if (!restaurant) {
-      console.error(`Restaurant not found with slug: ${restaurantSlug}`);
+      // console.error(`Restaurant not found with slug: ${restaurantSlug}`);
       return defaultMenuConfig;
     }
 
-    console.log("Restaurant found:", restaurant);
+    // console.log("Restaurant found:", restaurant);
 
     // Get restaurant settings and system settings for logos and theme
     const [restaurantSettings] = await Promise.all([
@@ -666,7 +666,7 @@ export const getMenuConfig = async (
     ]);
 
     // console.log("System settings loaded:", systemSettings);
-    console.log("Restaurant settings loaded:", restaurantSettings);
+    // console.log("Restaurant settings loaded:", restaurantSettings);
     // console.log("System settings loaded:", systemSettings);
 
     // Get dynamic menu data
@@ -676,9 +676,9 @@ export const getMenuConfig = async (
       getMenuItemsByRestaurant(restaurant.id),
     ]);
 
-    console.log("Categories loaded:", categories.length);
-    console.log("Subcategories loaded:", subcategoriesData.length);
-    console.log("Menu items loaded:", menuItemsData.length);
+    // console.log("Categories loaded:", categories.length);
+    // console.log("Subcategories loaded:", subcategoriesData.length);
+    // console.log("Menu items loaded:", menuItemsData.length);
 
     // Group subcategories by category
     const subcategoriesMap = new Map<string, SubCategoryWithLabel[]>();
@@ -733,15 +733,15 @@ export const getMenuConfig = async (
 
       // Check for category-specific image by ID
       const categoryKey = categoryId.toLowerCase();
-      console.log("🔍 Category Debug Info:", {
-        categoryId,
-        categoryKey,
-        categoryLabel,
-        availableKeys: Object.keys(categorySpecificImages),
-      });
+      // console.log("🔍 Category Debug Info:", {
+      //   categoryId,
+      //   categoryKey,
+      //   categoryLabel,
+      //   availableKeys: Object.keys(categorySpecificImages),
+      // });
 
       if (categorySpecificImages[categoryKey]) {
-        console.log("✅ Found match by ID:", categoryKey);
+        // console.log("✅ Found match by ID:", categoryKey);
         return categorySpecificImages[categoryKey];
       }
 
@@ -752,11 +752,11 @@ export const getMenuConfig = async (
         categoryLabel.ku?.toLowerCase(),
       ].filter(Boolean);
 
-      console.log("🔍 Checking category names:", categoryNames);
+      // console.log("🔍 Checking category names:", categoryNames);
 
       for (const name of categoryNames) {
         if (name && categorySpecificImages[name]) {
-          console.log("✅ Found match by name:", name);
+          // console.log("✅ Found match by name:", name);
           return categorySpecificImages[name];
         }
       }
@@ -876,11 +876,11 @@ export const getMenuConfig = async (
       categories: transformedCategories,
     };
 
-    console.log(
-      "Dynamic config created with",
-      transformedCategories.length,
-      "categories"
-    );
+    // console.log(
+    //   "Dynamic config created with",
+    //   transformedCategories.length,
+    //   "categories"
+    // );
     return dynamicConfig;
   } catch (error) {
     console.error("Failed to load dynamic menu configuration:", error);
