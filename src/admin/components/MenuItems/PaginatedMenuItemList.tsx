@@ -29,8 +29,6 @@ import {
 import { fetchCategories } from "@/admin/services/categoryService";
 import { fetchSubCategories } from "@/admin/services/subcategoryService";
 import {
-  DEFAULT_ITEMS_PER_PAGE,
-  MENU_ITEMS_PER_PAGE_OPTIONS,
   MENU_ITEM_SORT_OPTIONS,
   MENU_ITEM_STATUS_OPTIONS,
   getMenuItemDisplayName,
@@ -45,8 +43,6 @@ import {
   Star,
   Eye,
   BrushCleaning,
-  ChevronLeft,
-  ChevronRight,
   RefreshCw,
   Filter,
 } from "lucide-react";
@@ -96,9 +92,7 @@ const PaginatedMenuItemList: React.FC<PaginatedMenuItemListProps> = ({
   });
   const [showMobileFilters, setShowMobileFilters] = useState(false);
 
-  // Pagination states
-  const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage, setItemsPerPage] = useState(DEFAULT_ITEMS_PER_PAGE);
+  // Pagination states (keeping only totalItems for display)
   const [totalItems, setTotalItems] = useState(0);
 
   // Selection states
@@ -156,21 +150,6 @@ const PaginatedMenuItemList: React.FC<PaginatedMenuItemListProps> = ({
         ku: "ڕیزکردن بەپێی",
         ar: "ترتيب حسب",
         en: "Sort by",
-      },
-      previous: {
-        ku: "پێشوو",
-        ar: "السابق",
-        en: "Previous",
-      },
-      next: {
-        ku: "دواتر",
-        ar: "التالي",
-        en: "Next",
-      },
-      itemsPerPage: {
-        ku: "بڕگە لە هەر پەڕەیەک",
-        ar: "عناصر لكل صفحة",
-        en: "Items per page:",
       },
       views: {
         ku: "بینین",
@@ -247,16 +226,11 @@ const PaginatedMenuItemList: React.FC<PaginatedMenuItemListProps> = ({
 
   // Reload when filters change
   useEffect(() => {
-    setCurrentPage(1);
     setShowAllItems(false); // Reset to show limited items when filters change
     loadMenuItems();
   }, [filters]);
 
-  // Reload when pagination changes
-  useEffect(() => {
-    setShowAllItems(false); // Reset to show limited items when pagination changes
-    loadMenuItems();
-  }, [currentPage, itemsPerPage]);
+  // Remove pagination useEffect since we don't need it anymore
 
   const loadMenuItems = async () => {
     setLoading(true);
@@ -453,14 +427,12 @@ const PaginatedMenuItemList: React.FC<PaginatedMenuItemListProps> = ({
     setSelectedItems([]);
   };
 
-  // Paginate items
+  // Show all loaded items (no pagination)
   const paginatedItems = React.useMemo(() => {
-    const startIndex = (currentPage - 1) * itemsPerPage;
-    const endIndex = startIndex + itemsPerPage;
-    return menuItems.slice(startIndex, endIndex);
-  }, [menuItems, currentPage, itemsPerPage]);
+    return menuItems;
+  }, [menuItems]);
 
-  const totalPages = Math.ceil(totalItems / itemsPerPage);
+  // Remove totalPages calculation since we don't need pagination
 
   // Table columns for desktop
   const columns = [
@@ -953,7 +925,7 @@ const PaginatedMenuItemList: React.FC<PaginatedMenuItemListProps> = ({
                   data-menuitem-index={index}
                   className="animate-fade-in"
                   style={{
-                    animationDelay: `${(index % itemsPerPage) * 50}ms`,
+                    animationDelay: `${index * 50}ms`,
                     animationFillMode: "both",
                   }}
                 >
@@ -1032,88 +1004,6 @@ const PaginatedMenuItemList: React.FC<PaginatedMenuItemListProps> = ({
           className="animate-fade-in"
           searchable={false}
         />
-      )}
-
-      {/* Pagination */}
-      {totalPages > 1 && (
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
-          <div className="flex items-center gap-2">
-            <span className={`text-sm ${theme.textSecondary}`}>
-              {getText("showing")} {(currentPage - 1) * itemsPerPage + 1}{" "}
-              {getText("to")} {Math.min(currentPage * itemsPerPage, totalItems)}{" "}
-              {getText("of")} {totalItems} {getText("items")}
-            </span>
-          </div>
-
-          <div className="flex items-center gap-2">
-            <Button
-              variant="secondary"
-              onClick={() => setCurrentPage((prev) => Math.max(1, prev - 1))}
-              disabled={currentPage === 1}
-            >
-              <ChevronLeft className="h-4 w-4" />
-              {getText("previous")}
-            </Button>
-
-            <div className="flex items-center gap-1">
-              {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
-                const page = i + Math.max(1, currentPage - 2);
-                if (page > totalPages) return null;
-                return (
-                  <button
-                    key={page}
-                    onClick={() => setCurrentPage(page)}
-                    className={`
-                      w-8 h-8 rounded-lg text-sm font-medium transition-colors
-                      ${
-                        page === currentPage
-                          ? "bg-[var(--bg-main)] text-white"
-                          : `${theme.bgSecondary} ${theme.textSecondary} hover:bg-gray-200 dark:hover:bg-gray-700`
-                      }
-                    `}
-                  >
-                    {page}
-                  </button>
-                );
-              })}
-            </div>
-
-            <Button
-              variant="secondary"
-              onClick={() =>
-                setCurrentPage((prev) => Math.min(totalPages, prev + 1))
-              }
-              disabled={currentPage === totalPages}
-            >
-              {getText("next")}
-              <ChevronRight className="h-4 w-4" />
-            </Button>
-          </div>
-
-          <div className="flex items-center gap-2">
-            <span className={`text-sm ${theme.textSecondary}`}>
-              {getText("itemsPerPage")}
-            </span>
-            <select
-              value={itemsPerPage}
-              onChange={(e) => {
-                setItemsPerPage(Number(e.target.value));
-                setCurrentPage(1);
-              }}
-              className={`
-                px-2 py-1 rounded border text-sm
-                ${theme.bgCard} ${theme.textPrimary} ${theme.border}
-                focus:ring-2 focus:ring-[var(--bg-main)] focus:border-transparent
-              `}
-            >
-              {MENU_ITEMS_PER_PAGE_OPTIONS.map((option) => (
-                <option key={option} value={option}>
-                  {option}
-                </option>
-              ))}
-            </select>
-          </div>
-        </div>
       )}
 
       {/* Mobile Filter Modal */}
