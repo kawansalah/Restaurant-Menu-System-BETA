@@ -813,7 +813,7 @@ export const getMenuConfig = async (
         ...categorySubcategories.map((sub) => ({
           id: sub.id,
           label: sub.label,
-          img: sub.img || defaultFoodImage,
+          img: sub.thumbnail_url || sub.img || defaultFoodImage,
         })),
       ];
 

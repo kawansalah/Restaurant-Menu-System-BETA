@@ -1,6 +1,7 @@
 import supabase from "@/lib/supabase";
 import { publicSupabase } from "@/lib/publicSupabase";
 
+
 export interface SubCategory {
   id: string;
   restaurant_id: string;
@@ -64,7 +65,7 @@ export const getSubCategoriesByRestaurant = async (
         ar: subcategory.label_ar,
         en: subcategory.label_en,
       },
-      img: subcategory.image_url, // For backward compatibility
+      img: subcategory.thumbnail_url || subcategory.image_url, // Use thumbnail first, then fallback to original
       image_url: subcategory.image_url,
       thumbnail_url: subcategory.thumbnail_url,
       created_at: subcategory.created_at,
@@ -103,7 +104,7 @@ export const getSubCategoriesByCategory = async (
         ar: subcategory.label_ar,
         en: subcategory.label_en,
       },
-      img: subcategory.image_url,
+      img: subcategory.thumbnail_url || subcategory.image_url, // Use thumbnail first, then fallback to original
       image_url: subcategory.image_url,
       thumbnail_url: subcategory.thumbnail_url,
       created_at: subcategory.created_at,
@@ -144,7 +145,7 @@ export const getSubCategoryById = async (
         ar: data.label_ar,
         en: data.label_en,
       },
-      img: data.image_url,
+      img: data.thumbnail_url || data.image_url, // Use thumbnail first, then fallback to original
       image_url: data.image_url,
       thumbnail_url: data.thumbnail_url,
       created_at: data.created_at,
