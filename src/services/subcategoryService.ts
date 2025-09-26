@@ -1,7 +1,6 @@
 import supabase from "@/lib/supabase";
 import { publicSupabase } from "@/lib/publicSupabase";
 
-
 export interface SubCategory {
   id: string;
   restaurant_id: string;
