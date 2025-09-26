@@ -1,6 +1,25 @@
 import supabase from "@/lib/supabase";
 import { publicSupabase } from "@/lib/publicSupabase";
 
+/**
+ * Convert image URL from original to thumbnail for item cards
+ * @param imageUrl - Original image URL
+ * @param useThumbnail - Whether to use thumbnail (default: true for cards)
+ * @returns Converted image URL
+ */
+const getImageUrl = (
+  imageUrl: string | null | undefined,
+  useThumbnail: boolean = true
+): string | undefined => {
+  if (!imageUrl) return undefined;
+
+  if (useThumbnail && imageUrl.includes("/original/")) {
+    return imageUrl.replace("/original/", "/thumbnails/");
+  }
+
+  return imageUrl;
+};
+
 export interface MenuItem {
   id: string;
   restaurant_id: string;
@@ -96,7 +115,7 @@ export const getMenuItemsByRestaurant = async (
         en: item.description_en || "",
       },
       price: item.price.toString(),
-      image: item.image_url,
+      image: getImageUrl(item.image_url, true), // Use thumbnail for cards
       rating: item.rating,
       is_available: item.is_available,
       views_count: item.views_count,
@@ -146,7 +165,7 @@ export const getMenuItemsByCategory = async (
         en: item.description_en || "",
       },
       price: item.price.toString(),
-      image: item.image_url,
+      image: getImageUrl(item.image_url, true), // Use thumbnail for cards
       rating: item.rating,
       is_available: item.is_available,
       views_count: item.views_count,
@@ -196,7 +215,7 @@ export const getMenuItemsBySubCategory = async (
         en: item.description_en || "",
       },
       price: item.price.toString(),
-      image: item.image_url,
+      image: getImageUrl(item.image_url, true), // Use thumbnail for cards
       rating: item.rating,
       is_available: item.is_available,
       views_count: item.views_count,
@@ -247,7 +266,7 @@ export const getMenuItemById = async (
         en: data.description_en || "",
       },
       price: data.price.toString(),
-      image: data.image_url,
+      image: getImageUrl(data.image_url, false), // Use original for detailed view
       rating: data.rating,
       is_available: data.is_available,
       views_count: data.views_count,
@@ -305,7 +324,7 @@ export const searchMenuItems = async (
         en: item.description_en || "",
       },
       price: item.price.toString(),
-      image: item.image_url,
+      image: getImageUrl(item.image_url, true), // Use thumbnail for cards
       rating: item.rating,
       is_available: item.is_available,
       views_count: item.views_count,
