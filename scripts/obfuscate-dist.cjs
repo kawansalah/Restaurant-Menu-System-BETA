@@ -2,21 +2,21 @@
 // Obfuscate JS files in the Vite `dist` folder using javascript-obfuscator
 // This script is intended to be run after `vite build` (postbuild).
 
-const fs = require('fs');
-const path = require('path');
-const { obfuscate } = require('javascript-obfuscator');
+const fs = require("fs");
+const path = require("path");
+const { obfuscate } = require("javascript-obfuscator");
 
-const DIST_DIR = path.join(__dirname, '..', 'dist');
+const DIST_DIR = path.join(__dirname, "..", "dist");
 
 // Only run in production environment to avoid slowing local development
-if (process.env.NODE_ENV !== 'production' && !process.env.VERCEL) {
-  console.log('Skipping obfuscation: not in production or VERCEL environment');
+if (process.env.NODE_ENV !== "production" && !process.env.VERCEL) {
+  console.log("Skipping obfuscation: not in production or VERCEL environment");
   process.exit(0);
 }
 
 function obfuscateFile(filePath) {
   try {
-    const code = fs.readFileSync(filePath, 'utf8');
+    const code = fs.readFileSync(filePath, "utf8");
     const obfuscated = obfuscate(code, {
       compact: true,
       controlFlowFlattening: true,
@@ -25,21 +25,21 @@ function obfuscateFile(filePath) {
       deadCodeInjectionThreshold: 0.4,
       debugProtection: false,
       disableConsoleOutput: true,
-      identifierNamesGenerator: 'hexadecimal',
+      identifierNamesGenerator: "hexadecimal",
       log: false,
       renameGlobals: false,
       reservedNames: [],
       seed: 12345,
       selfDefending: true,
       stringArray: true,
-      stringArrayEncoding: ['base64'],
+      stringArrayEncoding: ["base64"],
       stringArrayThreshold: 0.75,
     }).getObfuscatedCode();
 
-    fs.writeFileSync(filePath, obfuscated, 'utf8');
-    console.log('Obfuscated:', filePath);
+    fs.writeFileSync(filePath, obfuscated, "utf8");
+    console.log("Obfuscated:", filePath);
   } catch (err) {
-    console.error('Failed to obfuscate', filePath, err);
+    console.error("Failed to obfuscate", filePath, err);
   }
 }
 
@@ -51,19 +51,19 @@ function walkDir(dir) {
     const stat = fs.statSync(full);
     if (stat.isDirectory()) {
       walkDir(full);
-    } else if (stat.isFile() && full.endsWith('.js')) {
+    } else if (stat.isFile() && full.endsWith(".js")) {
       // skip source maps
-      if (full.endsWith('.map.js')) return;
+      if (full.endsWith(".map.js")) return;
       obfuscateFile(full);
     }
   });
 }
 
 if (!fs.existsSync(DIST_DIR)) {
-  console.error('dist directory not found. Run `npm run build` first.');
+  console.error("dist directory not found. Run `npm run build` first.");
   process.exit(1);
 }
 
-console.log('Starting obfuscation in', DIST_DIR);
+console.log("Starting obfuscation in", DIST_DIR);
 walkDir(DIST_DIR);
-console.log('Obfuscation complete.');
+console.log("Obfuscation complete.");
