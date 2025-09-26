@@ -3,12 +3,12 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import { useThemeClasses } from "@/hooks/useThemeClasses";
 import { useRestaurantOptional } from "@/contexts/RestaurantContext";
 import { defaultMenuConfig } from "@/config/dynamicMenuConfig";
-import darkLogo from "@/assets/logo/dark.svg";
-import lightLogo from "@/assets/logo/light.svg";
+import darkLogo from "@/assets/logo/MyMenuCircle.svg";
+import lightLogo from "@/assets/logo/MyMenuCircle.svg";
 import kawanLogo from "@/assets/logo/kawan.svg";
 import kawanLogoDark from "@/assets/logo/kawan-dark.png";
 import codeLightIcon from "@/assets/icons/code-light.svg";
-import codeDarkIcon from "@/assets/icons/code-dark.svg";
+// import codeDarkIcon from "@/assets/icons/code-dark.svg";
 
 interface FooterProps {
   className?: string;
