@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Menu, X, Home, Star, Award, Phone } from "lucide-react";
 import ThemeToggle from "./ThemeToggle";
 import { useTheme } from "@/contexts/ThemeContext";
-import MyMenuLight from "@/assets/logo/My Menu Light.svg";
+// import MyMenuLight from "@/assets/logo/My Menu Light.svg";
 import MyMenuDark from "@/assets/logo/My Menu Dark.svg";
 
 interface NavbarProps {
@@ -161,7 +161,7 @@ const Navbar: React.FC<NavbarProps> = ({ className = "" }) => {
               {/* Mobile menu button */}
               <button
                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                className="lg:hidden p-2 mx-2 rounded-full transition-all duration-300 hover:scale-105"
+                className="lg:hidden p-2 mx-2ww rounded-full transition-all duration-300 hover:scale-105"
                 style={{
                   backgroundColor: "var(--bg-card)",
                   color: "var(--text-secondary)",
