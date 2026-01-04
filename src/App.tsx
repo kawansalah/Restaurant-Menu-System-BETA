@@ -18,6 +18,7 @@ import Loader from "@/components/loader";
 import Feedback from "@/pages/Feedback";
 import RestaurantMenuPage from "@/components/RestaurantMenuPage";
 import AdminRoutes from "@/admin/routes/AdminRoutes";
+import ADMIN_CONFIG from "@/admin/config/routes";
 import { MenuConfig } from "@/types/menu";
 import { getMenuConfig } from "@/config/dynamicMenuConfig";
 import LandingPage from "./pages/LandingPage";
@@ -136,7 +137,10 @@ function App() {
                     <Route path="/not-found" element={<NotFound />} />
                     <Route path="/404" element={<NotFound />} />
 
-                    <Route path="/admin/*" element={<AdminRoutes />} />
+                    <Route
+                      path={`${ADMIN_CONFIG.BASE_PATH}/*`}
+                      element={<AdminRoutes />}
+                    />
                     <Route path="/*" element={<NotFound />} />
                   </Routes>
                 </Router>

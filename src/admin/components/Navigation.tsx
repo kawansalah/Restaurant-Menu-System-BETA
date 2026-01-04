@@ -9,11 +9,12 @@ import {
   Users,
   Feedback,
   Settings as SettingsIcon,
-  Restaurant
+  Restaurant,
 } from "@/admin/components/Icons";
 import { useThemeClasses } from "@/hooks/useThemeClasses";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useAdminAuth } from "@/admin/contexts/AdminAuthContext";
+import ADMIN_CONFIG from "@/admin/config/routes";
 import ThemeToggle from "@/components/ThemeToggle";
 import LanguageDropdown from "@/components/LanguageDropdown";
 import adminLogoDark from "@/assets/logo/MyMenu.svg";
@@ -42,7 +43,7 @@ const Navigation: React.FC<NavigationProps> = ({ className = "" }) => {
 
   const navigationItems: NavigationItem[] = [
     {
-      path: "/admin",
+      path: ADMIN_CONFIG.BASE_PATH,
       icon: Home,
       label: {
         ku: "سەرەتا",
@@ -51,7 +52,7 @@ const Navigation: React.FC<NavigationProps> = ({ className = "" }) => {
       },
     },
     {
-      path: "/admin/categories",
+      path: ADMIN_CONFIG.CATEGORIES_PATH,
       icon: Category,
       label: {
         ku: "بەشەکان",
@@ -60,7 +61,7 @@ const Navigation: React.FC<NavigationProps> = ({ className = "" }) => {
       },
     },
     {
-      path: "/admin/subcategories",
+      path: ADMIN_CONFIG.SUBCATEGORIES_PATH,
       icon: SubCategory,
       label: {
         ku: "جۆرەکان",
@@ -69,7 +70,7 @@ const Navigation: React.FC<NavigationProps> = ({ className = "" }) => {
       },
     },
     {
-      path: "/admin/menu-items",
+      path: ADMIN_CONFIG.MENU_ITEMS_PATH,
       icon: MenuItems,
       label: {
         ku: "خواردنەکان",
@@ -78,7 +79,7 @@ const Navigation: React.FC<NavigationProps> = ({ className = "" }) => {
       },
     },
     {
-      path: "/admin/feedback",
+      path: ADMIN_CONFIG.FEEDBACK_PATH,
       icon: Feedback,
       label: {
         ku: "فیدباک",
@@ -87,7 +88,7 @@ const Navigation: React.FC<NavigationProps> = ({ className = "" }) => {
       },
     },
     {
-      path: "/admin/users",
+      path: ADMIN_CONFIG.USERS_PATH,
       icon: Users,
       label: {
         ku: "بەکارهێنەران",
@@ -96,15 +97,19 @@ const Navigation: React.FC<NavigationProps> = ({ className = "" }) => {
       },
     },
     // Only show Restaurants for super_admin
-    ...(user?.role === "super_admin" ? [{
-      path: "/admin/restaurants",
-      icon: Restaurant,
-      label: {
-        ku: "چێشتخانەکان",
-        ar: "المطاعم",
-        en: "Restaurants",
-      },
-    }] : []),
+    ...(user?.role === "super_admin"
+      ? [
+          {
+            path: ADMIN_CONFIG.RESTAURANTS_PATH,
+            icon: Restaurant,
+            label: {
+              ku: "چێشتخانەکان",
+              ar: "المطاعم",
+              en: "Restaurants",
+            },
+          },
+        ]
+      : []),
   ];
 
   const getLocalizedLabel = (item: NavigationItem) => {
@@ -112,8 +117,11 @@ const Navigation: React.FC<NavigationProps> = ({ className = "" }) => {
   };
 
   const isActiveRoute = (path: string) => {
-    if (path === "/admin") {
-      return location.pathname === "/admin" || location.pathname === "/admin/";
+    if (path === ADMIN_CONFIG.BASE_PATH) {
+      return (
+        location.pathname === ADMIN_CONFIG.BASE_PATH ||
+        location.pathname === `${ADMIN_CONFIG.BASE_PATH}/`
+      );
     }
     return location.pathname.startsWith(path);
   };
@@ -122,11 +130,11 @@ const Navigation: React.FC<NavigationProps> = ({ className = "" }) => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
   };
 
-  const title ={
+  const title = {
     ku: "مێنوەکەم",
     ar: "قائمتي",
     en: "My Menu",
-  }
+  };
 
   return (
     <header
@@ -140,9 +148,13 @@ const Navigation: React.FC<NavigationProps> = ({ className = "" }) => {
       <div className="max-w-7xl mx-auto px-4 sm:px-4 lg:px-5">
         <div className="relative h-16">
           {/* Logo/Brand - Positioned on the right */}
-          <div className={`absolute ${language === "ku" || language === "ar" ? "right-0" : "left-0"} top-1/2 transform -translate-y-1/2`}>
+          <div
+            className={`absolute ${
+              language === "ku" || language === "ar" ? "right-0" : "left-0"
+            } top-1/2 transform -translate-y-1/2`}
+          >
             <Link
-              to="/admin"
+              to={ADMIN_CONFIG.BASE_PATH}
               className={`flex items-center gap-2 text-xl font-bold ${
                 theme.isDark ? theme.buttonTextPrimary : theme.textPrimary
               } hover:${theme.textMain} transition-colors`}
@@ -225,7 +237,11 @@ const Navigation: React.FC<NavigationProps> = ({ className = "" }) => {
           </nav>
 
           {/* Right Side Controls - Positioned on the left */}
-          <div className={`absolute ${language === "ku" || language === "ar" ? "left-0" : "right-0"} top-1/2 transform -translate-y-1/2 flex items-center space-x-1 md:space-x-3`}>
+          <div
+            className={`absolute ${
+              language === "ku" || language === "ar" ? "left-0" : "right-0"
+            } top-1/2 transform -translate-y-1/2 flex items-center space-x-1 md:space-x-3`}
+          >
             {/* Language Dropdown */}
             <div className="hidden md:block">
               <LanguageDropdown />
@@ -237,12 +253,12 @@ const Navigation: React.FC<NavigationProps> = ({ className = "" }) => {
             {/* Settings Button */}
             <div className="relative group">
               <Link
-                to="/admin/settings"
+                to={ADMIN_CONFIG.SETTINGS_PATH}
                 className={`
                   hidden md:flex items-center justify-center w-10 h-10 rounded-full
                   transition-all duration-200 border
                   ${
-                    isActiveRoute("/admin/settings")
+                    isActiveRoute(ADMIN_CONFIG.SETTINGS_PATH)
                       ? `${theme.bgMain} ${
                           theme.isDark
                             ? theme.buttonTextPrimary
@@ -318,7 +334,6 @@ const Navigation: React.FC<NavigationProps> = ({ className = "" }) => {
             }
             overflow-hidden
           `}
-          
         >
           <div
             className={`
@@ -417,13 +432,13 @@ const Navigation: React.FC<NavigationProps> = ({ className = "" }) => {
                 }}
               >
                 <Link
-                  to="/admin/settings"
+                  to={ADMIN_CONFIG.SETTINGS_PATH}
                   onClick={() => setIsMobileMenuOpen(false)}
                   className={`
                     flex items-center px-4 py-3 rounded-full
                     transition-all duration-200 hover:scale-[1.02]
                     ${
-                      isActiveRoute("/admin/settings")
+                      isActiveRoute(ADMIN_CONFIG.SETTINGS_PATH)
                         ? `${theme.bgMain} ${
                             theme.isDark
                               ? theme.textPrimary
@@ -440,7 +455,7 @@ const Navigation: React.FC<NavigationProps> = ({ className = "" }) => {
                       }
                       transition-all duration-200 h-6 w-6 transform
                       ${
-                        isActiveRoute("/admin/settings")
+                        isActiveRoute(ADMIN_CONFIG.SETTINGS_PATH)
                           ? `scale-110 ${
                               theme.isDark
                                 ? theme.textPrimary

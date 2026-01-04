@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { useAdminAuth } from "@/admin/contexts/AdminAuthContext";
 import { useThemeClasses } from "@/hooks/useThemeClasses";
 import { useLanguage } from "@/contexts/LanguageContext";
+import ADMIN_CONFIG from "@/admin/config/routes";
 import {
   Analytics,
   Logout,
@@ -79,7 +80,7 @@ export default function AdminDashboard() {
         ar: "إدارة المستخدمين",
         en: "Manage Users",
       },
-      path: "/admin/users",
+      path: ADMIN_CONFIG.USERS_PATH,
     },
     {
       icon: Feedback,
@@ -88,10 +89,10 @@ export default function AdminDashboard() {
         ar: "عرض التعليقات",
         en: "View Feedback",
       },
-      path: "/admin/feedback",
+      path: ADMIN_CONFIG.FEEDBACK_PATH,
     },
     {
-      path: "/admin/settings",
+      path: ADMIN_CONFIG.SETTINGS_PATH,
       icon: Settings,
       label: {
         ku: "ڕێکخستنەکان",
@@ -166,7 +167,7 @@ export default function AdminDashboard() {
         </div>
       </div>
 
-{/* 
+      {/* 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {dashboardStats.map((stat, index) => (
           <div

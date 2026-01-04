@@ -3,7 +3,7 @@ import { Outlet, Navigate } from "react-router-dom";
 import { useAdminAuth } from "../contexts/AdminAuthContext";
 import Navigation from "@/admin/components/Navigation";
 import { useThemeClasses } from "@/hooks/useThemeClasses";
-
+import ADMIN_CONFIG from "@/admin/config/routes";
 
 const AdminLayout: React.FC = () => {
   const { isAuthenticated, isLoading } = useAdminAuth();
@@ -20,7 +20,7 @@ const AdminLayout: React.FC = () => {
   }
 
   if (!isAuthenticated) {
-    return <Navigate to="/admin/login" replace />;
+    return <Navigate to={ADMIN_CONFIG.LOGIN_PATH} replace />;
   }
 
   return (
