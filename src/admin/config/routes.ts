@@ -2,6 +2,9 @@
 // Change ADMIN_ROUTE_PATH to customize your admin panel URL
 // Examples: 'dashboard', 'management', 'backend', 'control', 'sys-admin', etc.
 
+// Debug: Log environment variable (remove in production)
+console.log('ENV VITE_ADMIN_ROUTE_PATH:', import.meta.env.VITE_ADMIN_ROUTE_PATH);
+
 export const ADMIN_CONFIG = {
   // Change this to your desired admin path (without leading slash)
   ROUTE_PATH: import.meta.env.VITE_ADMIN_ROUTE_PATH || "sys-panel-2026",
