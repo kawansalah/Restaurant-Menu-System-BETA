@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Navigate } from "react-router-dom";
 import { defaultAdminConfig } from "../config/adminConfig";
+import ADMIN_CONFIG from "@/admin/config/routes";
 import { useAdminAuth } from "@/admin/contexts/AdminAuthContext";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useThemeClasses } from "@/hooks/useThemeClasses";
@@ -26,7 +27,7 @@ const AdminLoginMobile: React.FC = () => {
   const t = config.ui.login;
 
   if (isAuthenticated) {
-    return <Navigate to="/admin" replace />;
+    return <Navigate to={ADMIN_CONFIG.DASHBOARD_PATH} replace />;
   }
   
   const handleSubmit = async (e: React.FormEvent) => {

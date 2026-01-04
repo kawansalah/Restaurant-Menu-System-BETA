@@ -3,6 +3,7 @@ import { useThemeClasses } from "@/hooks/useThemeClasses";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useAdminAuth } from "@/admin/contexts/AdminAuthContext";
 import { defaultAdminConfig } from "@/admin/config/adminConfig";
+import ADMIN_CONFIG from "@/admin/config/routes";
 import { Navigate } from "react-router-dom";
 import PaginatedRestaurantList from "@/admin/components/Restaurants/PaginatedRestaurantList";
 
@@ -14,7 +15,7 @@ const Restaurants: React.FC = () => {
 
   // Only super_admin can access this page
   if (!user || user.role !== "super_admin") {
-    return <Navigate to="/admin" replace />;
+    return <Navigate to={ADMIN_CONFIG.DASHBOARD_PATH} replace />;
   }
 
   const getLoadingText = () => {
